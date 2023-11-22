@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="音読み">音読み</string>
+    <string name="熟語">熟語</string>
+    <string name="質問数">質問数</string>
+    <string name="numberofquestions">numberOfQuestions</string>
+</resources>

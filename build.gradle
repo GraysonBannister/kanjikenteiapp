@@ -1,0 +1,17 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.1.0" // Or whatever version you're using
+        classpath "com.chaquo.python:gradle:14.0.2" // Add this line for Chaquopy
+    }
+}
+
+plugins {
+    id 'com.android.application' version '8.0.2' apply false
+    id 'com.android.library' version '8.0.2' apply false
+    id 'com.chaquo.python' version '14.0.2' apply false
+}
