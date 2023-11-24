@@ -14,7 +14,7 @@ public class PythonInterpreter {
     public PythonInterpreter(){
         try{
             Python py = Python.getInstance();
-            libModule = py.getModule("lib");
+            libModule = py.getModule("pythonGrader");
         } catch (PyException e){
             e.printStackTrace();
             //Handle initialization errors

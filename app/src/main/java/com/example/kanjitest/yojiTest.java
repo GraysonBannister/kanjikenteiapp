@@ -47,6 +47,7 @@ public class yojiTest extends Activity {
     private TextView notificationTextView;
     private drawingView yojiDrawCanvas;
     private ImageButton clearDrawingButton;
+    private Button submitDrawnKanji;
 
 
     private List<yojijukugoQuestions> yojijukugoQuestions;
@@ -89,6 +90,7 @@ public class yojiTest extends Activity {
         notificationTextView = findViewById(R.id.jukugoNotification);
         yojiDrawCanvas = findViewById(R.id.yojiDrawCanvas);
         clearDrawingButton = findViewById(R.id.clearDrawingButton);
+        submitDrawnKanji = findViewById(R.id.submitDrawnKanji);
 
 //database
         yojijukugoDBHelper = new YojijukugoDatabaseHelper(this);
@@ -144,10 +146,18 @@ public class yojiTest extends Activity {
                     notificationTextView.setText(correctAnswer);
                     notificationTextView.setVisibility(View.VISIBLE);
                     currentyojijukugoQuestionIndex++;
-                    yojiDrawCheckAnswer();
+                    //yojiDrawCheckAnswer();
 
                 }
 
+            }
+        });
+
+        submitDrawnKanji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                yojiDrawCheckAnswer();
+                yojiDrawCanvas.clearDrawing();
             }
         });
 
@@ -207,6 +217,9 @@ public class yojiTest extends Activity {
         }
 
 
+        //Section for yojiType
+
+
     }
     public void startYojiTypeTest() {
         yojijukugoQuestions = questionDAO.getAllYojijukugoEntries();
@@ -222,22 +235,7 @@ public class yojiTest extends Activity {
 
 
     }
-
-    public void startYojiDrawTest() {
-        yojijukugoQuestions = questionDAO.getAllYojijukugoEntries();
-
-        Collections.shuffle(yojijukugoQuestions); //randomize questions asked
-
-        if (yojijukugoQuestions.size() > questionCount) {
-            yojijukugoQuestions = yojijukugoQuestions.subList(0, questionCount);
-        }
-        currentyojijukugoQuestionIndex = 0;
-        score = 0;
-        displayYojiDrawQuesiton();//Start Yoji Draw Test
-
-
-    }
-//This function is for the Typing test. Shows yojijukugo, not reading
+    //This function is for the Typing test. Shows yojijukugo, not reading
     public void displayyojijukugoQuestion() {
 
         yojijukugoQuestions currentQuestion = yojijukugoQuestions.get(currentyojijukugoQuestionIndex);
@@ -249,17 +247,7 @@ public class yojiTest extends Activity {
     }
 
 
-    public void displayYojiDrawQuesiton(){
-        // Re-enable drawing for the next question
-
-        notificationTextView.setText("");
-        yojijukugoQuestions currentQuestion = yojijukugoQuestions.get(currentyojijukugoQuestionIndex);
-        Log.d("TestActivity", "Number of yojijukugo Questions" + yojijukugoQuestions.size());
-        questionTextView.setText(currentQuestion.getReading());
-        updateQuestionCounter();
-
-    }
-//Check answer (for yojiType only)
+    //Check answer (for yojiType only)
     public void checkYojiTypeAnswer(String userAnswer) {
         String correctAnswer = yojijukugoQuestions.get(currentyojijukugoQuestionIndex).getReading();
         String[] yojijukugoArray = correctAnswer.split(",");
@@ -318,6 +306,58 @@ public class yojiTest extends Activity {
 
         }
     }
+
+    //Section for yojiDraw
+
+    public void startYojiDrawTest() {
+        yojijukugoQuestions = questionDAO.getAllYojijukugoEntries();
+
+        Collections.shuffle(yojijukugoQuestions); //randomize questions asked
+
+        if (yojijukugoQuestions.size() > questionCount) {
+            yojijukugoQuestions = yojijukugoQuestions.subList(0, questionCount);
+        }
+        currentyojijukugoQuestionIndex = 0;
+        score = 0;
+        displayYojiDrawQuesiton();//Start Yoji Draw Test
+
+
+    }
+
+
+
+
+
+    //Used to get Kanji's unicode for yoji draw test checking
+private String getKanjiUnicode(String kanji){
+        //Convert the kanji character to its unicode representation
+    //Note: Ensure that the kanji character is properly represented in database
+        return String.format("\\u%04x", (int) kanji.charAt(0));
+}
+    private String[] targetKanjiUnicode = new String[4];
+    private int currentKanjiIndex = 0;
+    public void displayYojiDrawQuesiton(){
+        // Re-enable drawing for the next question
+        notificationTextView.setText("");
+
+        //Retreive the target kanji for the current question
+        yojijukugoQuestions currentQuestion = yojijukugoQuestions.get(currentyojijukugoQuestionIndex);
+        String yojijukugo = currentQuestion.getYojijukugo();
+        //split the yojijukugo into individual kanji and convert each to a string
+        for (int i = 0; i < 4; i++){
+            char kanjiChar = yojijukugo.charAt(1);
+            String kanjiString = String.valueOf(kanjiChar); //convert char to string
+            targetKanjiUnicode[i] = getKanjiUnicode(kanjiString);
+        }
+        currentKanjiIndex = 0; //Reset to first kanji
+
+
+        Log.d("TestActivity", "Number of yojijukugo Questions" + yojijukugoQuestions.size());
+        //update UI
+        questionTextView.setText(currentQuestion.getReading());
+        updateQuestionCounter();
+
+    }
     // Implement getUserDrawingStrokes to convert user's drawing from yojiDrawCanvas to List<List<Float>>
     private List<List<Float>> getUserDrawingStrokes() {
         // This depends on how you're storing the user's drawing data
@@ -350,18 +390,50 @@ public class yojiTest extends Activity {
 
     public void yojiDrawCheckAnswer() {
         List<List<Float>> userStrokes = getUserDrawingStrokes(); // Implement to retrieve user's drawing
-        String result = pythonInterpreter.analyzeDrawing(userStrokes);
+        String scoreResult = pythonInterpreter.gradeUserKanji(userStrokes, targetKanjiUnicode[currentKanjiIndex], true);
 
         runOnUiThread(() -> {
-            if (result != null && !result.isEmpty()) {
+            if (scoreResult != null && !scoreResult.isEmpty()) {
                 //Show the result in notificationTextView or handle as needed
-                notificationTextView.setText(result);
+                float score = Float.parseFloat(scoreResult);
+                // Process the score and update UI
+                // Example: update a part of UI specific to the current kanji
+
+                updateKanjiScoreUI(currentKanjiIndex, score);
+                currentKanjiIndex++;
+                if (currentKanjiIndex < 4){
+                    // Prompt the user to draw the next kanji
+                    promptNextKanjiDrawing();
+                } else {
+                    // All four kanji have been drawn and graded
+                    if (score > 80) {
+                        notificationTextView.setText("Correct! Score: " + score);
+                    } else {
+                        notificationTextView.setText("Incorrect. Score: " + score);
+                    }
+
+                }
             } else {
                 notificationTextView.setText("No matches found or error in analysis");
             }
         });
     }
+    // Implement these methods as needed
+    private void updateKanjiScoreUI(int kanjiIndex, float score) {
+        // Update the UI component for the specific kanji with the score
+        notificationTextView.setText(currentKanjiIndex);
+    }
 
+    private void promptNextKanjiDrawing() {
+        // Update the UI to prompt the user to draw the next kanji
+        notificationTextView.setText("Please enter next kanji");
+    }
+
+    private void processFinalYojijukugoResult() {
+        // Aggregate the results of the four kanji and display the final outcome
+
+
+    }
 
     //This updates the counter each time the next question appears
     private void updateQuestionCounter() {
