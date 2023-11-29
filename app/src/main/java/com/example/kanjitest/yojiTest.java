@@ -49,6 +49,10 @@ public class yojiTest extends Activity {
     private ImageButton clearDrawingButton;
     private Button submitDrawnKanji;
 
+    //drawing test
+    private List<List<List<Float>>> userDrawnKanjiStrokes = new ArrayList<>(4);
+
+
 
     private List<yojijukugoQuestions> yojijukugoQuestions;
     private QuestionDAO questionDAO;
@@ -121,7 +125,10 @@ public class yojiTest extends Activity {
             questionDAO = new QuestionDAO(yojijukugoDBHelper.getReadableDatabase());
 
         }
-
+//drawing test drawing list
+    for(int i = 0; i < 4; i++){
+        userDrawnKanjiStrokes.add(new ArrayList<>());
+    }
 
 
 
@@ -156,8 +163,16 @@ public class yojiTest extends Activity {
         submitDrawnKanji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                yojiDrawCheckAnswer();
+                List<List<Float>> currentStrokes = getUserDrawingStrokes();
+                userDrawnKanjiStrokes.set(currentKanjiIndex, new ArrayList<>(currentStrokes));
                 yojiDrawCanvas.clearDrawing();
+
+                currentKanjiIndex++;
+                if(currentKanjiIndex < 4){
+                    promptNextKanjiDrawing();
+                }else{
+                    gradeSubmittedKanji();
+                }
             }
         });
 
@@ -309,6 +324,8 @@ public class yojiTest extends Activity {
 
     //Section for yojiDraw
 
+
+
     public void startYojiDrawTest() {
         yojijukugoQuestions = questionDAO.getAllYojijukugoEntries();
 
@@ -345,7 +362,7 @@ private String getKanjiUnicode(String kanji){
         String yojijukugo = currentQuestion.getYojijukugo();
         //split the yojijukugo into individual kanji and convert each to a string
         for (int i = 0; i < 4; i++){
-            char kanjiChar = yojijukugo.charAt(1);
+            char kanjiChar = yojijukugo.charAt(i);
             String kanjiString = String.valueOf(kanjiChar); //convert char to string
             targetKanjiUnicode[i] = getKanjiUnicode(kanjiString);
         }
@@ -388,6 +405,16 @@ private String getKanjiUnicode(String kanji){
         return processedStrokes;
     }
 
+    private void gradeSubmittedKanji(){
+        for(int i = 0; i < 4; i++){
+            String scoreResult = pythonInterpreter.gradeUserKanji(userDrawnKanjiStrokes.get(i), targetKanjiUnicode[i], true);
+            //process and display the score result for each kanji
+        }
+        //Reset for the next yojijukugo or end the test
+        currentKanjiIndex = 0;
+        userDrawnKanjiStrokes.clear();
+    }
+
     public void yojiDrawCheckAnswer() {
         List<List<Float>> userStrokes = getUserDrawingStrokes(); // Implement to retrieve user's drawing
         String scoreResult = pythonInterpreter.gradeUserKanji(userStrokes, targetKanjiUnicode[currentKanjiIndex], true);
@@ -426,7 +453,9 @@ private String getKanjiUnicode(String kanji){
 
     private void promptNextKanjiDrawing() {
         // Update the UI to prompt the user to draw the next kanji
-        notificationTextView.setText("Please enter next kanji");
+        if (currentKanjiIndex < 4) {
+            notificationTextView.setText("Draw kanji" + (currentKanjiIndex +1));
+        }
     }
 
     private void processFinalYojijukugoResult() {

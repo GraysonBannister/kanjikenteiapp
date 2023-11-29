@@ -21,26 +21,6 @@ public class PythonInterpreter {
         }
     }
 
-    public String analyzeDrawing(List<List<Float>> strokes){
-        try{
-            if(libModule != null){
-                // Call the python function
-                PyObject result = libModule.callAttr("matches", strokes);
-                // Assuming the function returns a list of tuples (score, kanji)
-                List<PyObject> resultsList = result.asList();
-                String output = "";
-                for (PyObject tuple : resultsList) {
-                    List<PyObject> tupleList = tuple.asList();
-                    output += tupleList.get(1).toString() + " (" + tupleList.get(0).toString() + ")/n";
-                }
-                return output;
-            }
-        }catch (PyException e){
-            e.printStackTrace();
-            //Handle Python script errors
-        }
-        return null; //Return null or a default value in case of error
-    }
 
     public String gradeUserKanji(List<List<Float>> strokes, String targetKanjiUnicode, boolean useFuzzy){
         try {
