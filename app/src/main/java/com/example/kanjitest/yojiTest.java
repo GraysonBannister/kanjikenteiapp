@@ -168,13 +168,14 @@ public class yojiTest extends Activity {
                 yojiDrawCanvas.clearDrawing();
 
                 currentKanjiIndex++;
-                if(currentKanjiIndex < 4){
+                if (currentKanjiIndex < 4) {
                     promptNextKanjiDrawing();
-                }else{
+                } else if (currentKanjiIndex == 4) {
                     gradeSubmittedKanji();
                 }
             }
         });
+
 
         nextQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -405,14 +406,48 @@ private String getKanjiUnicode(String kanji){
         return processedStrokes;
     }
 
-    private void gradeSubmittedKanji(){
-        for(int i = 0; i < 4; i++){
-            String scoreResult = pythonInterpreter.gradeUserKanji(userDrawnKanjiStrokes.get(i), targetKanjiUnicode[i], true);
-            //process and display the score result for each kanji
+    private void gradeSubmittedKanji() {
+        float totalScore = 0;
+        int numberOfKanjiGraded = 0;
+
+        try {
+            for (int i = 0; i < userDrawnKanjiStrokes.size(); i++) {
+                String scoreResult = pythonInterpreter.gradeUserKanji(userDrawnKanjiStrokes.get(i), targetKanjiUnicode[i], true);
+                //process and display the score result for each kanji
+                if (scoreResult != null && !scoreResult.isEmpty()) {
+                    float score = Float.parseFloat(scoreResult);
+                    totalScore += score;
+                    numberOfKanjiGraded++;
+                    //Update UI for the individual kanji score, if needed
+                } else {
+                    //handle the case when grading fails or returns no result
+                    notificationTextView.setText("grading failed or no result returned");
+                    notificationTextView.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(() ->{
+                                notificationTextView.setVisibility(View.GONE);
+                            },5000
+                    );
+                }
+            }
+
+            if (numberOfKanjiGraded == 4) {
+                float averageScore = totalScore / numberOfKanjiGraded;
+                //update UI based on the aggregated score
+                notificationTextView.setText("Average Score: " + averageScore);
+                notificationTextView.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(() ->{
+                            notificationTextView.setVisibility(View.GONE);
+                        },5000
+                );
+            }
+
+            //Reset for the next yojijukugo or end the test
+            currentKanjiIndex = 0;
+            userDrawnKanjiStrokes.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle any exceptions during grading
         }
-        //Reset for the next yojijukugo or end the test
-        currentKanjiIndex = 0;
-        userDrawnKanjiStrokes.clear();
     }
 
     public void yojiDrawCheckAnswer() {
@@ -435,13 +470,28 @@ private String getKanjiUnicode(String kanji){
                     // All four kanji have been drawn and graded
                     if (score > 80) {
                         notificationTextView.setText("Correct! Score: " + score);
+                        notificationTextView.setVisibility(View.VISIBLE);
+                        new Handler().postDelayed(() ->{
+                                    notificationTextView.setVisibility(View.GONE);
+                                },5000
+                        );
                     } else {
                         notificationTextView.setText("Incorrect. Score: " + score);
+                        notificationTextView.setVisibility(View.VISIBLE);
+                        new Handler().postDelayed(() ->{
+                                    notificationTextView.setVisibility(View.GONE);
+                                },5000
+                        );
                     }
 
                 }
             } else {
                 notificationTextView.setText("No matches found or error in analysis");
+                notificationTextView.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(() ->{
+                            notificationTextView.setVisibility(View.GONE);
+                        },5000
+                );
             }
         });
     }
@@ -455,6 +505,11 @@ private String getKanjiUnicode(String kanji){
         // Update the UI to prompt the user to draw the next kanji
         if (currentKanjiIndex < 4) {
             notificationTextView.setText("Draw kanji" + (currentKanjiIndex +1));
+            notificationTextView.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(() ->{
+                        notificationTextView.setVisibility(View.GONE);
+                    },5000
+            );
         }
     }
 
