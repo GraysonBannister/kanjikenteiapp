@@ -7,6 +7,20 @@
     android:background="#EFEEEA">
 
     <Button
+        android:id="@+id/kunyomiType"
+        android:layout_width="175dp"
+        android:layout_height="80dp"
+        android:backgroundTint="#4E4F50"
+        android:text="訓読み"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.484" />
+
+    <Button
         android:id="@+id/onyomiBack"
         android:layout_width="100dp"
         android:layout_height="60dp"
@@ -26,25 +40,14 @@
         android:layout_width="175dp"
         android:layout_height="80dp"
         android:backgroundTint="#4E4F50"
-        android:text="初める"
+        android:text="@string/音読み"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.368" />
-
-    <SeekBar
-        android:id="@+id/onyomiQuestionSlider"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.659" />
+        app:layout_constraintVertical_bias="0.332" />
 
     <TextView
         android:id="@+id/onyomiQuestionCount"
@@ -53,10 +56,10 @@
         android:textColor="#2C2B2B"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.752" />
+        app:layout_constraintVertical_bias="0.635" />
 
     <TextView
         android:id="@+id/onyomiQuestionNumberTitle"
@@ -67,8 +70,19 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onyomiType"
-        app:layout_constraintVertical_bias="0.126" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.566" />
+
+    <SeekBar
+        android:id="@+id/onyomiQuestionSlider"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.596" />
 </androidx.constraintlayout.widget.ConstraintLayout>

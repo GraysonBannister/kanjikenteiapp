@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class titleScreen extends AppCompatActivity {
 
-   private Button onyomiTestButton;
+   private Button onyomiAndKunyomiTestButton;
    private Button jukugoTestButton;
    private Button yojijukugoTestButton;
 
@@ -22,7 +22,7 @@ public class titleScreen extends AppCompatActivity {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_main);
 
-        onyomiTestButton = findViewById(R.id.onyomiTestButton);
+       onyomiAndKunyomiTestButton = findViewById(R.id.onyomiTestButton);
         jukugoTestButton = findViewById(R.id.jukugoTestButton);
         yojijukugoTestButton = findViewById(R.id.yojijukugoTestButton);
 
@@ -45,11 +45,11 @@ public class titleScreen extends AppCompatActivity {
 
 
        //onyomi test button
-       onyomiTestButton.setOnClickListener(new View.OnClickListener(){
+       onyomiAndKunyomiTestButton.setOnClickListener(new View.OnClickListener(){
            @Override
            public void onClick(View v){
                //startTest("onyomi", questionsNumberSeekBar.getProgress());
-               Intent intent = new Intent(titleScreen.this, onyomiTestSelection.class);
+               Intent intent = new Intent(titleScreen.this, onyomiAndKunyomiTestSelection.class);
                startActivity(intent);
            }
        });

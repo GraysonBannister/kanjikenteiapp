@@ -11,29 +11,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 
-public class onyomiTestSelection extends AppCompatActivity {
+public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
     private Button onyomiType;
     private Button onyomiDraw;
-    private Button onyomiBack;
-    private SeekBar onyomiQuestionSlider;
-    private TextView onyomiQuestionNumberTitle;
-    private TextView onyomiQuestionCount;
+
+    private Button kunyomiType;
+
+    private Button onyomiAndKunyomiBack;
+    private SeekBar onyomiAndKunyomiQuestionSlider;
+    private TextView onyomiAndKunyomiQuestionNumberTitle;
+    private TextView onyomiAndKunyomiQuestionCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.onyomi_testselection);
+        setContentView(R.layout.onyomi_and_kunyomi_testselection);
 
 
-        onyomiBack = findViewById(R.id.onyomiBack);
-        onyomiQuestionSlider = findViewById(R.id.onyomiQuestionSlider);
-        onyomiQuestionNumberTitle = findViewById(R.id.onyomiQuestionNumberTitle);
-        onyomiQuestionCount = findViewById(R.id.onyomiQuestionCount);
+        onyomiAndKunyomiBack = findViewById(R.id.onyomiBack);
+        onyomiAndKunyomiQuestionSlider = findViewById(R.id.onyomiQuestionSlider);
+        onyomiAndKunyomiQuestionNumberTitle = findViewById(R.id.onyomiQuestionNumberTitle);
+        onyomiAndKunyomiQuestionCount = findViewById(R.id.onyomiQuestionCount);
         onyomiType = findViewById(R.id.onyomiType);
+
+        kunyomiType =findViewById(R.id.kunyomiType);
+
 
 
 
@@ -47,10 +51,10 @@ public class onyomiTestSelection extends AppCompatActivity {
             Toast.makeText(this, "データベース構築中に問題が発生しました。", Toast.LENGTH_SHORT).show();
         }
 
-        onyomiQuestionSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        onyomiAndKunyomiQuestionSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                onyomiQuestionCount.setText(progress + "問");
+                onyomiAndKunyomiQuestionCount.setText(progress + "問");
             }
 
             @Override
@@ -64,7 +68,7 @@ public class onyomiTestSelection extends AppCompatActivity {
             }
         });
         //Goes back to title screen
-        onyomiBack.setOnClickListener(new View.OnClickListener() {
+        onyomiAndKunyomiBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -74,8 +78,18 @@ public class onyomiTestSelection extends AppCompatActivity {
         onyomiType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTest("onyomiType", onyomiQuestionSlider.getProgress());
+                startTest("onyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
 
+            }
+
+
+
+        });
+
+        kunyomiType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startTest("kunyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
             }
         });
 
@@ -84,13 +98,13 @@ public class onyomiTestSelection extends AppCompatActivity {
     }
 
     private void startTest(String testType, int questionCount){
-        Intent intent = new Intent(onyomiTestSelection.this, onyomiTest.class);
+        Intent intent = new Intent(onyomiAndKunyomiTestSelection.this, onyomiTest.class);
         intent.putExtra("test_type", testType);
         intent.putExtra("question_count", questionCount);
         if(questionCount > 0){
             startActivity(intent);
         }else{
-            onyomiQuestionCount.setText("問題数を選んだでください。");
+            onyomiAndKunyomiQuestionCount.setText("問題数を選んだでください。");
         }
     }
 

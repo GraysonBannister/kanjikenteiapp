@@ -65,10 +65,6 @@ public class yojiTest extends Activity {
     private int yojijukugoWrongAnswersCount = 0;
 
 
-    // Convert dp to pixels
-    private float dpToPx(float dp) {
-        return dp * getResources().getDisplayMetrics().density;
-    }
 
     //database var
     private YojijukugoDatabaseHelper yojijukugoDBHelper;
@@ -153,7 +149,7 @@ public class yojiTest extends Activity {
                     notificationTextView.setText(correctAnswer);
                     notificationTextView.setVisibility(View.VISIBLE);
                     currentyojijukugoQuestionIndex++;
-                    //yojiDrawCheckAnswer();
+                    yojiDrawCheckAnswer();
 
                 }
 
@@ -163,7 +159,7 @@ public class yojiTest extends Activity {
         submitDrawnKanji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<List<Float>> currentStrokes = getUserDrawingStrokes();
+                List<List<Float>> currentStrokes = yojiDrawCanvas.getStrokes();
                 userDrawnKanjiStrokes.set(currentKanjiIndex, new ArrayList<>(currentStrokes));
                 yojiDrawCanvas.clearDrawing();
 
@@ -253,11 +249,15 @@ public class yojiTest extends Activity {
     }
     //This function is for the Typing test. Shows yojijukugo, not reading
     public void displayyojijukugoQuestion() {
+        if (!yojijukugoQuestions.isEmpty() && currentyojijukugoQuestionIndex < yojijukugoQuestions.size()) {
 
-        yojijukugoQuestions currentQuestion = yojijukugoQuestions.get(currentyojijukugoQuestionIndex);
-        Log.d("TestActivity", "Number of yojijukugo Questions" + yojijukugoQuestions.size());
-        questionTextView.setText(currentQuestion.getYojijukugo());
-        updateQuestionCounter();
+            yojijukugoQuestions currentQuestion = yojijukugoQuestions.get(currentyojijukugoQuestionIndex);
+            Log.d("TestActivity", "Number of yojijukugo Questions" + yojijukugoQuestions.size());
+            questionTextView.setText(currentQuestion.getYojijukugo());
+            updateQuestionCounter();
+        }else{
+            Log.e("TestActivity", "yojijukugoQuesitons list is empty or index of bounds");
+        }
 
 
     }
@@ -352,6 +352,7 @@ private String getKanjiUnicode(String kanji){
     //Note: Ensure that the kanji character is properly represented in database
         return String.format("\\u%04x", (int) kanji.charAt(0));
 }
+
     private String[] targetKanjiUnicode = new String[4];
     private int currentKanjiIndex = 0;
     public void displayYojiDrawQuesiton(){
@@ -377,42 +378,18 @@ private String getKanjiUnicode(String kanji){
 
     }
     // Implement getUserDrawingStrokes to convert user's drawing from yojiDrawCanvas to List<List<Float>>
-    private List<List<Float>> getUserDrawingStrokes() {
-        // This depends on how you're storing the user's drawing data
-        List<List<Float>> processedStrokes = new ArrayList<>();
-        List<List<Float>> rawStrokes = yojiDrawCanvas.getStrokes();
 
-        float canvasWidthPx = dpToPx(300);// Assuming 300dp is the width
-        float canvasHeightPx = dpToPx(380);// Assuming 380dp is the height
-
-        for (List<Float> stroke : rawStrokes) {
-            //Simply stroke to two poitns (start and end)
-            //This is basic example; may need a more sophisticated approach
-            if (stroke.size() >= 4) { //ensure at least 2 points
-                float x1 = stroke.get(0);
-                float y1 = stroke.get(1);
-                float x2 = stroke.get(stroke.size() - 2);
-                float y2 = stroke.get(stroke.size() - 1);
-                processedStrokes.add(Arrays.asList(x1, y1, x2, y2));
-                // Normalize to 0-255 range
-                float normalizedX1 = (x1 / canvasWidthPx) * 255;
-                float normalizedY1 = (y1 / canvasHeightPx) * 255;
-                float normalizedX2 = (x2 / canvasWidthPx) * 255;
-                float normalizedY2 = (y2 / canvasHeightPx) * 255;
-                processedStrokes.add(Arrays.asList(normalizedX1, normalizedY1, normalizedX2, normalizedY2));
-            }
-
-        }
-        return processedStrokes;
-    }
 
     private void gradeSubmittedKanji() {
         float totalScore = 0;
         int numberOfKanjiGraded = 0;
+        if (userDrawnKanjiStrokes.isEmpty() || userDrawnKanjiStrokes.get(0).isEmpty()){
+            Log.e("TestActivity", "userDrawnKanjiStrokes is empty");
+        }
 
         try {
             for (int i = 0; i < userDrawnKanjiStrokes.size(); i++) {
-                String scoreResult = pythonInterpreter.gradeUserKanji(userDrawnKanjiStrokes.get(i), targetKanjiUnicode[i], true);
+                String scoreResult = pythonInterpreter.gradeUserKanji(userDrawnKanjiStrokes.get(i), targetKanjiUnicode[i], false);
                 //process and display the score result for each kanji
                 if (scoreResult != null && !scoreResult.isEmpty()) {
                     float score = Float.parseFloat(scoreResult);
@@ -451,49 +428,25 @@ private String getKanjiUnicode(String kanji){
     }
 
     public void yojiDrawCheckAnswer() {
-        List<List<Float>> userStrokes = getUserDrawingStrokes(); // Implement to retrieve user's drawing
-        String scoreResult = pythonInterpreter.gradeUserKanji(userStrokes, targetKanjiUnicode[currentKanjiIndex], true);
+        List<List<Float>> userStrokes = yojiDrawCanvas.getStrokes(); // Implement to retrieve user's drawing
+        Log.d("yojiTest", "User strokes data: " + userStrokes.toString()); // Check the stroke data
 
-        runOnUiThread(() -> {
-            if (scoreResult != null && !scoreResult.isEmpty()) {
-                //Show the result in notificationTextView or handle as needed
-                float score = Float.parseFloat(scoreResult);
-                // Process the score and update UI
-                // Example: update a part of UI specific to the current kanji
+        String kanjiResult = pythonInterpreter.findClosestKanji(userStrokes,true, true);
 
-                updateKanjiScoreUI(currentKanjiIndex, score);
-                currentKanjiIndex++;
-                if (currentKanjiIndex < 4){
-                    // Prompt the user to draw the next kanji
-                    promptNextKanjiDrawing();
-                } else {
-                    // All four kanji have been drawn and graded
-                    if (score > 80) {
-                        notificationTextView.setText("Correct! Score: " + score);
-                        notificationTextView.setVisibility(View.VISIBLE);
-                        new Handler().postDelayed(() ->{
-                                    notificationTextView.setVisibility(View.GONE);
-                                },5000
-                        );
-                    } else {
-                        notificationTextView.setText("Incorrect. Score: " + score);
-                        notificationTextView.setVisibility(View.VISIBLE);
-                        new Handler().postDelayed(() ->{
-                                    notificationTextView.setVisibility(View.GONE);
-                                },5000
-                        );
-                    }
 
-                }
-            } else {
-                notificationTextView.setText("No matches found or error in analysis");
-                notificationTextView.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(() ->{
-                            notificationTextView.setVisibility(View.GONE);
-                        },5000
-                );
-            }
-        });
+
+        if (kanjiResult != null && !kanjiResult.isEmpty()){
+            currentKanjiIndex++;
+            notificationTextView.setText("Found result" + kanjiResult);
+
+
+        }else {
+            notificationTextView.setText("Result not found");
+        }
+        notificationTextView.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(() ->{notificationTextView.setVisibility(View.GONE);}, 5000);
+
+
     }
     // Implement these methods as needed
     private void updateKanjiScoreUI(int kanjiIndex, float score) {
@@ -541,7 +494,7 @@ private String getKanjiUnicode(String kanji){
 
 
 
-        private List<List<Float>> strokes = new ArrayList<>(); //Stores all strokes
+        private List<List<Float>> strokes; //Stores all strokes
         private List<Float> currentStroke = new ArrayList<>(); //Stores points of the current stroke
 
 
@@ -550,6 +503,12 @@ private String getKanjiUnicode(String kanji){
         private Canvas drawCanvas;
         private Bitmap canvasBitmap;
         private boolean isDrawingEnabled = true;
+
+
+        // Convert dp to pixels
+        private float dpToPx(float dp) {
+            return dp * getResources().getDisplayMetrics().density;
+        }
 
         public drawingView(Context context, AttributeSet attrs) {
 
@@ -669,10 +628,30 @@ private String getKanjiUnicode(String kanji){
         //Capture stroke input
 
         public List<List<Float>> getStrokes() {
-            // Implement logic to extract strokes from the drawing
-            // and convert them into a list of points (x, y).
-            // Example: [[x1, y1, x2, y2], [x3, y3, x4, y4], ...]
-            return strokes;
+            List<List<Float>> formattedStrokes = new ArrayList<>();
+            float canvasWidthPx = dpToPx(300); // Replace 300 with the actual width in dp
+            float canvasHeightPx = dpToPx(380); // Replace 380 with the actual height in dp
+
+            for (List<Float> stroke : strokes) {
+                // Assuming each stroke has at least two points (start and end)
+                if (stroke.size() >= 4) {
+                    float startX = stroke.get(0);
+                    float startY = stroke.get(1);
+                    float endX = stroke.get(stroke.size() - 2);
+                    float endY = stroke.get(stroke.size() - 1);
+
+                    // Normalize coordinates to the range expected by your Python script
+                    float normalizedStartX = (startX / canvasWidthPx) * 255;
+                    float normalizedStartY = (startY / canvasHeightPx) * 255;
+                    float normalizedEndX = (endX / canvasWidthPx) * 255;
+                    float normalizedEndY = (endY / canvasHeightPx) * 255;
+
+                    // Add the normalized stroke to the list
+                    formattedStrokes.add(Arrays.asList(normalizedStartX, normalizedStartY,
+                            normalizedEndX, normalizedEndY));
+                }
+            }
+            return formattedStrokes;
         }
 
         public void clearDrawing() {

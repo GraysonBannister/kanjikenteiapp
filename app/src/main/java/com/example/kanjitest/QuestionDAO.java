@@ -1,6 +1,7 @@
 package com.example.kanjitest;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -84,6 +85,35 @@ public class QuestionDAO {
         Log.d("YojijukugoDAO", "Fetched " + entries.size() + " yojijukugo entries.");
         cursor.close();
         return entries;
+    }
+
+    public List<kunyomiQuestion> getAllKunyomiEntries(){
+        List<kunyomiQuestion> entries = new ArrayList<>();
+
+        String query = "SELECT rank, kanji, reading, kunyomi FROM kunyomData";
+
+        Cursor cursor = database.rawQuery(query,null);
+        if(cursor.moveToFirst()){
+            do{
+                int rank = cursor.getInt(0);
+                String kanji = cursor.getString(1);
+                String reading = cursor.getString(2);
+                String kunyomi = cursor.getString(3);
+
+                if(kanji != null && reading != null && kunyomi != null){
+                    entries.add(new kunyomiQuestion(rank, kanji, reading, kunyomi));
+                }
+
+
+            }while(cursor.moveToNext());
+
+        }
+        Log.d("KunyomiDAO", "Fetched " + entries.size() + " kunyomi entries.");
+        cursor.close();
+        return entries;
+
+
+
     }
 
 }

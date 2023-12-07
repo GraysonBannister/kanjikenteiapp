@@ -1,28 +1,21 @@
 package com.example.kanjitest;
 
-import java.util.List;
-import java.util.Collections;
-
 import android.app.Activity;
 import android.database.sqlite.SQLiteException;
-//drawing
-
-
-import android.util.Log;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.os.Handler;
+import java.util.Collections;
+import java.util.List;
 
+public class kunyomiTest extends Activity {
 
-public class onyomiTest extends Activity {
-
-
-    //UI interface features
     private TextView questionTextView;
     private EditText answerEditText;
     private Button submitButton;
@@ -32,18 +25,18 @@ public class onyomiTest extends Activity {
     private TextView questionCounterTextView;
     private TextView notificationTextView;
 
-    private List<onyomiQuestion> onyomiQuestions;
+    private List<kunyomiQuestion> KunyomiQuestions;
     private QuestionDAO questionDAO;
 
     //test var
     private int score = 0;
     private int questionCount;
-    //onyomi test
-    private int currentOnyomiQuestionIndex = 0;
-    private int onyomiWrongAnswersCount = 0;
+    //Kunyomi test
+    private int currentKunyomiQuestionIndex = 0;
+    private int KunyomiWrongAnswersCount = 0;
 
     //database var
-    private DatabaseHelper dbHelper;
+    private kunyomiDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +54,7 @@ public class onyomiTest extends Activity {
         questionCounterTextView = findViewById(R.id.onyomiTestQuestionCount);
         notificationTextView = findViewById(R.id.onyomiNotification);
 
-        dbHelper = new DatabaseHelper(this);
+        dbHelper = new kunyomiDatabaseHelper(this);
 
         try {
             dbHelper.openDatabase();
@@ -73,7 +66,7 @@ public class onyomiTest extends Activity {
             return;
         }
 
-        //sets up question database 
+        //sets up question database
         questionDAO = new QuestionDAO(dbHelper.getReadableDatabase());
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -82,9 +75,9 @@ public class onyomiTest extends Activity {
                 String userAnswer = answerEditText.getText().toString().trim();
                 String testType = getIntent().getStringExtra("test_type");
 
-                if ("onyomiType".equals(testType)) {
-                    checkOnyomiTypeAnswer(userAnswer);
-                } else {//This is for other onyomi tests nothing is here yet
+                if ("kunyomiType".equals(testType)) {
+                    checkKunyomiTypeAnswer(userAnswer);
+                } else {//This is for other Kunyomi tests nothing is here yet
                     finish();
                 }
             }
@@ -95,10 +88,10 @@ public class onyomiTest extends Activity {
             public void onClick(View view) {
                 String testType = getIntent().getStringExtra("test_type");
 
-                if ("onyomiType".equals(testType)) {
-                    currentOnyomiQuestionIndex++;
-                    if (currentOnyomiQuestionIndex < onyomiQuestions.size()) {
-                        displayOnyomiTypeQuestion();
+                if ("kunyomiType".equals(testType)) {
+                    currentKunyomiQuestionIndex++;
+                    if (currentKunyomiQuestionIndex < KunyomiQuestions.size()) {
+                        displayKunyomiTypeQuestion();
                     } else {
                         //end test if no test is selected
                         finish();
@@ -118,9 +111,9 @@ public class onyomiTest extends Activity {
         });
 
         //Start test!
-        if ("onyomiType".equals(testType)) {
-            //start onyomi typed test
-            startOnyomiTypeTest();
+        if ("kunyomiType".equals(testType)) {
+            //start Kunyomi typed test
+            startKunyomiTypeTest();
 
         } else {
             //for other modes nothing here yet
@@ -130,37 +123,37 @@ public class onyomiTest extends Activity {
 
     }//end of on open
 
-    public void startOnyomiTypeTest() {
-        onyomiQuestions = questionDAO.getAllOnyomiQuestions();
+    public void startKunyomiTypeTest() {
+        KunyomiQuestions = questionDAO.getAllKunyomiEntries();
 
-        Collections.shuffle(onyomiQuestions);//randomize question list
+        Collections.shuffle(KunyomiQuestions);//randomize question list
 
-        if (onyomiQuestions.size() > questionCount) {//What does this do?
-            onyomiQuestions = onyomiQuestions.subList(0, questionCount);
+        if (KunyomiQuestions.size() > questionCount) {//What does this do?
+            KunyomiQuestions = KunyomiQuestions.subList(0, questionCount);
 
         }
 
-        currentOnyomiQuestionIndex = 0;
+        currentKunyomiQuestionIndex = 0;
         score = 0;
-        displayOnyomiTypeQuestion();
+        displayKunyomiTypeQuestion();
 
     }
 
 
-    public void displayOnyomiTypeQuestion() {
-        onyomiQuestion currentQuestion = onyomiQuestions.get(currentOnyomiQuestionIndex);
-        Log.d("TestActivity", "Number of Onyomi Questions" + onyomiQuestions.size());
-        questionTextView.setText(currentQuestion.getKanji());
+    public void displayKunyomiTypeQuestion() {
+        kunyomiQuestion currentQuestion = KunyomiQuestions.get(currentKunyomiQuestionIndex);
+        Log.d("TestActivity", "Number of Kunyomi Questions" + KunyomiQuestions.size());
+        questionTextView.setText(currentQuestion.getKunyomi());
         updateQuestionCounter();
     }
 
-    public void checkOnyomiTypeAnswer(String userAnswer) {
-        String correctAnswer = onyomiQuestions.get(currentOnyomiQuestionIndex).getOnyomi();
-        String[] onyomiArray = correctAnswer.split(",");
+    public void checkKunyomiTypeAnswer(String userAnswer) {
+        String correctAnswer = KunyomiQuestions.get(currentKunyomiQuestionIndex).getKunyomi();
+        String[] KunyomiArray = correctAnswer.split(",");
 
         boolean isCorrect = false;
-        for (String onyomi : onyomiArray) {
-            if (userAnswer.trim().equals(onyomi.trim())) {
+        for (String Kunyomi : KunyomiArray) {
+            if (userAnswer.trim().equals(Kunyomi.trim())) {
                 isCorrect = true;
                 break;
             }
@@ -176,8 +169,8 @@ public class onyomiTest extends Activity {
                 answerEditText.setFocusable(true);
             }, 1000);
 
-            onyomiWrongAnswersCount = 0;
-            currentOnyomiQuestionIndex++;
+            KunyomiWrongAnswersCount = 0;
+            currentKunyomiQuestionIndex++;
             score++;
         } else {
             answerEditText.setText("答えは間違っています。"); //when the answer is wrong, update the ui element to show a 'wrong answer' message
@@ -188,9 +181,9 @@ public class onyomiTest extends Activity {
                 answerEditText.setFocusable(true);
             }, 1000);
             //Increment wrong answer count
-            onyomiWrongAnswersCount++;
+            KunyomiWrongAnswersCount++;
             //when wrong answer count rises to 3 display answer
-            if (onyomiWrongAnswersCount >= 3) {
+            if (KunyomiWrongAnswersCount >= 3) {
                 //set the notification text view to show the correct answer and after some time make the text dissapear
                 notificationTextView.setText("正解は「" + correctAnswer + "」です。");
                 notificationTextView.setVisibility(View.VISIBLE);
@@ -198,7 +191,7 @@ public class onyomiTest extends Activity {
                             notificationTextView.setVisibility(View.GONE);
                         }, 5000
                 );
-                onyomiWrongAnswersCount = 0;
+                KunyomiWrongAnswersCount = 0;
 
             }
 
@@ -208,8 +201,8 @@ public class onyomiTest extends Activity {
     //This updates the counter each time the next question appears
     private void updateQuestionCounter() {
         String testType = getIntent().getStringExtra("test_type");
-        if ("onyomiType".equals(testType)) {
-            questionCounterTextView.setText("質問 " + (currentOnyomiQuestionIndex + 1) + "/" + questionCount);
+        if ("kunyomiType".equals(testType)) {
+            questionCounterTextView.setText("質問 " + (currentKunyomiQuestionIndex + 1) + "/" + questionCount);
         }
 
     }
@@ -222,3 +215,4 @@ public class onyomiTest extends Activity {
         }
     }
 }//end of class
+

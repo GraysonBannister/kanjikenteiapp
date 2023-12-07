@@ -391,7 +391,34 @@ if __name__ == "__main__":
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :
 
+def find_closest_kanji(strokes, fuzzy=False, offby1=False):
+    """
+    Find the closest matching kanji for given strokes.
+    :param strokes: List of strokes drawn by the user.
+    :param fuzzy: Boolean for fuzzy matching.
+    :param offby1: Boolean to allow off-by-one stroke matches.
+    :return: Closest matching kanji character.
+    """
 
+   # Convert Java ArrayList to Python list
+    strokes = []
+    for i in range(strokes.size()):
+        stroke = strokes.get(i)
+        python_stroke = [stroke.get(j) for j in range(stroke.size())]
+        strokes.append(python_stroke)
+
+
+    data = kanji_data()
+    matches_result = matches(strokes, data, fuzzy=fuzzy, offby1=offby1)
+    # Assuming you want the top match
+    top_match = next(iter(matches_result), None)
+    if top_match:
+        return top_match[1]  # Returns the kanji character
+    return None
+
+
+
+  
 def grade_user_kanji(user_strokes, target_kanji_unicode, data=None, fuzzy=False):
     """
     Grades a user's drawn kanji based on its similarity to a specific target kanji.

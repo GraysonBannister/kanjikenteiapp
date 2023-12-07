@@ -36,6 +36,32 @@ public class PythonInterpreter {
         }
         return null; // Return null or a default value in case of error
     }
+
+
+    public String findClosestKanji(List<List<Float>> strokes, boolean fuzzy, boolean offby1){
+
+        try {
+            if(libModule != null){
+
+/*
+                Float[][] strokesArray =  new Float[strokes.size()][];
+                for (int i = 0; i < strokes.size(); i++){
+                    List<Float> stroke = strokes.get(i);
+                    strokesArray[i] = stroke.toArray(new Float[0]);
+
+                }*/
+                //PyObject pyStrokes =  new PyObject(.getModule("builtins").callAttr("list", strokes));
+                PyObject result = libModule.callAttr("find_closest_kanji", strokes, fuzzy, offby1);
+                return result.toString();
+            }
+
+        }catch (PyException e){
+            e.printStackTrace();
+            //handle exception
+        }
+        return null;
+
+    }
     }
 
 

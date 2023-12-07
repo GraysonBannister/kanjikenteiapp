@@ -1,22 +1,22 @@
 package com.example.kanjitest;
 
-import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-
-public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "KanjiDatabasev3.db";
+public class kunyomiDatabaseHelper extends SQLiteOpenHelper {
+    private static final String DB_NAME = "kunyomiData.db";
     private final String DB_PATH;
     private SQLiteDatabase myDatabase;
     private final Context myContext;
 
-    public DatabaseHelper(Context context) {
+    public kunyomiDatabaseHelper(Context context) {
         super(context, DB_NAME, null, 1);
         this.myContext = context;
         this.DB_PATH = this.myContext.getDatabasePath(DB_NAME).getParent() + "/";
@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         } catch (SQLiteException e) {
-            // database does't exist yet.
+            // database doesn't exist yet.
         }
         if (checkDB != null) {
             checkDB.close();
@@ -80,8 +80,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
-
-
-
-
 }
+
