@@ -44,9 +44,12 @@ public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
 
         //Initiate the DatabaseHelper
         DatabaseHelper kanjiDatabaseHelper = new DatabaseHelper(this);
+        kunyomiDatabaseHelper kunyomiDatabaseHelper = new kunyomiDatabaseHelper(this);
 
         try {
             kanjiDatabaseHelper.createDatabase();
+            kunyomiDatabaseHelper.createDatabase();
+
         } catch (IOException ioe) {
             Toast.makeText(this, "データベース構築中に問題が発生しました。", Toast.LENGTH_SHORT).show();
         }
