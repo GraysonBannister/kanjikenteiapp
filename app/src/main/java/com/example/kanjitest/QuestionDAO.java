@@ -112,8 +112,27 @@ public class QuestionDAO {
         cursor.close();
         return entries;
 
+    }
 
+    public List<kotowazaQuestion> getAllKotowazaEntries(){
+        List<kotowazaQuestion> entries =  new ArrayList<>();
 
+        String query = "SELECT kotowaza, answer FROM kotowaza";
+
+        Cursor cursor = database.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            do{
+                String kotowaza = cursor.getString(0);
+                String answer = cursor.getString(1);
+
+                if (kotowaza != null && answer != null){
+                    entries.add(new kotowazaQuestion(kotowaza, answer));
+                }
+            }while(cursor.moveToNext());
+        }
+        Log.d("KotowazaDOA", "Fetched" + entries.size() + "kotowza entries.");
+        cursor.close();
+        return entries;
     }
 
 }
