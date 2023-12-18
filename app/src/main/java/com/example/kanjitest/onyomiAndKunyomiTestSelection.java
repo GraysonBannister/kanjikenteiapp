@@ -92,7 +92,15 @@ public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
         kunyomiType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTest("kunyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
+                int questionCountValue = onyomiAndKunyomiQuestionSlider.getProgress();
+                if(questionCountValue > 0){
+                    Intent intent = new Intent(onyomiAndKunyomiTestSelection.this, kunyomiTest.class);
+                    intent.putExtra("test_type", "kunyomiType");
+                    intent.putExtra("question_count", questionCountValue);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(onyomiAndKunyomiTestSelection.this, "問題数を選んでください。", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

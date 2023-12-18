@@ -134,17 +134,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.508" />
 
-    <Button
-        android:id="@+id/submitDrawnKanji2"
-        android:layout_width="128dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="10dp"
-        android:text="enter kanji"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.192"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.449"
-        tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

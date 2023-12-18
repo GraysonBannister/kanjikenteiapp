@@ -90,7 +90,7 @@ public class QuestionDAO {
     public List<kunyomiQuestion> getAllKunyomiEntries(){
         List<kunyomiQuestion> entries = new ArrayList<>();
 
-        String query = "SELECT rank, kanji, reading, kunyomi FROM kunyomData";
+        String query = "SELECT rank, kanji, reading, kunyomi FROM kunyomiData";
 
         Cursor cursor = database.rawQuery(query,null);
         if(cursor.moveToFirst()){
@@ -101,7 +101,18 @@ public class QuestionDAO {
                 String kunyomi = cursor.getString(3);
 
                 if(kanji != null && reading != null && kunyomi != null){
-                    entries.add(new kunyomiQuestion(rank, kanji, reading, kunyomi));
+                    // Split the reading and kunyomi strings into arrays
+                    String[] readingsArray = reading.split(",");
+                    String[] kunyomiArray = kunyomi.split(",");
+
+                    // Check if the arrays lengths match to ensure data integrity
+                    if (readingsArray.length == kunyomiArray.length) {
+                        entries.add(new kunyomiQuestion(rank, kanji, readingsArray, kunyomiArray));
+                    } else {
+                        Log.e("KunyomiDAO", "Mismatch in lengths of readings and kunyomi for kanji: " + kanji);
+                    }
+
+                    entries.add(new kunyomiQuestion(rank, kanji, readingsArray, kunyomiArray));
                 }
 
 
@@ -111,6 +122,8 @@ public class QuestionDAO {
         Log.d("KunyomiDAO", "Fetched " + entries.size() + " kunyomi entries.");
         cursor.close();
         return entries;
+
+
 
     }
 

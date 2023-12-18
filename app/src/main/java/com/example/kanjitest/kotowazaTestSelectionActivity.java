@@ -15,8 +15,6 @@ import java.io.IOException;
 public class kotowazaTestSelectionActivity extends AppCompatActivity {
 
 
-
-
     private Button kotowazaTest;
     private Button kotowazaBack;
     private SeekBar kotowazaQuestionSlider;
@@ -37,7 +35,7 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
 
 
         //Initiate the DatabaseHelper
-        DatabaseHelper kotowazaDatabaseHelper = new DatabaseHelper(this);
+        kotowazaDatabaseHelper kotowazaDatabaseHelper = new kotowazaDatabaseHelper(this);
 
 
         try {
@@ -74,13 +72,20 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
         kotowazaTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTest("kotowazaTest", kotowazaQuestionSlider.getProgress());
-
+                int questionCountValue = kotowazaQuestionSlider.getProgress();
+                if(questionCountValue > 0){
+                    Intent intent = new Intent(kotowazaTestSelectionActivity.this, kotowazaTest.class);
+                    intent.putExtra("test_type", "kotowazaTest");
+                    intent.putExtra("question_count", questionCountValue);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(kotowazaTestSelectionActivity.this, "問題数を選んでください。", Toast.LENGTH_SHORT).show();
+                }
             }
-
-
         });
     }
+}
+    /*
         private void startTest(String testType, int questionCount){
             Intent intent = new Intent(kotowazaTestSelectionActivity.this, kotowazaTest.class);
             intent.putExtra("test_type", testType);
@@ -93,3 +98,4 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
         }
 
     }
+*/

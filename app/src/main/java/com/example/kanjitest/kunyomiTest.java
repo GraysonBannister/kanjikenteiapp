@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,9 @@ public class kunyomiTest extends Activity {
     private int questionCount;
     //Kunyomi test
     private int currentKunyomiQuestionIndex = 0;
+
+    // Field to keep track of the current correct answer
+    private String currentCorrectAnswer;
     private int KunyomiWrongAnswersCount = 0;
 
     //database var
@@ -139,25 +143,30 @@ public class kunyomiTest extends Activity {
 
     }
 
-
     public void displayKunyomiTypeQuestion() {
         kunyomiQuestion currentQuestion = KunyomiQuestions.get(currentKunyomiQuestionIndex);
+        Pair<String, String> kunyomiAndReading = currentQuestion.getRandomKunyomiAndReading();
+
+
         Log.d("TestActivity", "Number of Kunyomi Questions" + KunyomiQuestions.size());
-        questionTextView.setText(currentQuestion.getKunyomi());
+        // Set the current correct answer
+        currentCorrectAnswer = kunyomiAndReading.second;
+
+        // Display the kunyomi to the user
+        questionTextView.setText(kunyomiAndReading.first);
         updateQuestionCounter();
     }
 
     public void checkKunyomiTypeAnswer(String userAnswer) {
-        String correctAnswer = KunyomiQuestions.get(currentKunyomiQuestionIndex).getKunyomi();
-        String[] KunyomiArray = correctAnswer.split(",");
+        //String correctAnswer = KunyomiQuestions.get(currentKunyomiQuestionIndex).getReading();
+        //String[] KunyomiArray = correctAnswer.split(",");
 
-        boolean isCorrect = false;
-        for (String Kunyomi : KunyomiArray) {
-            if (userAnswer.trim().equals(Kunyomi.trim())) {
-                isCorrect = true;
-                break;
-            }
+        boolean isCorrect = userAnswer.trim().equals(currentCorrectAnswer.trim());
+
+        if (userAnswer.trim().equals(currentCorrectAnswer.trim())) {
+            isCorrect = true;
         }
+
 
 
         if (isCorrect) {
@@ -185,7 +194,7 @@ public class kunyomiTest extends Activity {
             //when wrong answer count rises to 3 display answer
             if (KunyomiWrongAnswersCount >= 3) {
                 //set the notification text view to show the correct answer and after some time make the text dissapear
-                notificationTextView.setText("正解は「" + correctAnswer + "」です。");
+                notificationTextView.setText("正解は「" + currentCorrectAnswer + "」です。");
                 notificationTextView.setVisibility(View.VISIBLE);
                 new Handler().postDelayed(() -> {
                             notificationTextView.setVisibility(View.GONE);
@@ -215,4 +224,3 @@ public class kunyomiTest extends Activity {
         }
     }
 }//end of class
-

@@ -11,7 +11,7 @@
         android:layout_width="175dp"
         android:layout_height="80dp"
         android:backgroundTint="#4E4F50"
-        android:text="訓読み"
+        android:text="はじめる"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"

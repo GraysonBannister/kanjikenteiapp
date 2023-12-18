@@ -29,8 +29,7 @@ import android.widget.Toast;
 
 import android.os.Handler;
 
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
+
 
 
 public class kotowazaTest extends Activity {
@@ -89,10 +88,7 @@ public class kotowazaTest extends Activity {
         kotowazaDBHelper = new kotowazaDatabaseHelper(this);
 
 
-        //start python
-        if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
+
 
         try {
 
@@ -106,12 +102,9 @@ public class kotowazaTest extends Activity {
         }
 
         //questionDAO = new QuestionDAO(dbHelper.getReadableDatabase());
-        if ("kotowazaType".equals(testType)) {
-            questionDAO = new QuestionDAO(kotowazaDBHelper.getReadableDatabase());
-        } else { // For kotowazaDraw test
+
             questionDAO = new QuestionDAO(kotowazaDBHelper.getReadableDatabase());
 
-        }
 //drawing test drawing list
         for (int i = 0; i < 4; i++) {
             userDrawnKanjiStrokes.add(new ArrayList<>());
@@ -129,13 +122,10 @@ public class kotowazaTest extends Activity {
             @Override
             public void onClick(View v) {
 
-                String testType = getIntent().getStringExtra("test_type");
-
 
                 String correctAnswer = kotowazaQuestions.get(currentkotowazaQuestionIndex).getAnswer();
                 notificationTextView.setText(correctAnswer);
                 notificationTextView.setVisibility(View.VISIBLE);
-                currentkotowazaQuestionIndex++;
 
 
             }
@@ -148,9 +138,9 @@ public class kotowazaTest extends Activity {
             @Override
             public void onClick(View v) {
                 String testType = getIntent().getStringExtra("test_type");
-
+                notificationTextView.setText("");
                 //Fix this for kotowazaType
-                if ("kotowazaType".equals(testType)) {
+                if ("kotowazaTest".equals(testType)) {
                     currentkotowazaQuestionIndex++;
                     if (currentkotowazaQuestionIndex < kotowazaQuestions.size()) {
                         //checks if the current question number is less the the total questions
@@ -159,16 +149,6 @@ public class kotowazaTest extends Activity {
                         finish(); //End of test, display score or return to main menu
                     }
                     //Fix this for kotowazaDraw
-                } else if ("kotowazaDraw".equals(testType)) {
-                    currentkotowazaQuestionIndex++;
-                    if (currentkotowazaQuestionIndex < kotowazaQuestions.size()) { //checks if the current question number is less the the total questions
-
-                        displayKotowazaQuestion();
-                        //if it is less, then display the question
-                    } else {
-                        finish();//End of test, display score or return to main menu
-                    }
-
                 }
 
             }
@@ -228,19 +208,22 @@ public class kotowazaTest extends Activity {
 
         private void updateQuestionCounter () {
             String testType = getIntent().getStringExtra("test_type");
-            if ("kotowazaType".equals(testType)) {
+            if ("kotowazaTest".equals(testType)) {
                 //Update question counter view for kotowazaType
-
-                questionCounterTextView.setText("質問 " + (currentkotowazaQuestionIndex + 1) + "/" + questionCount);
-            } else if ("kotowazaDraw".equals(testType)) {
-                //update question counter view for kotowazaDraw
-
                 questionCounterTextView.setText("質問 " + (currentkotowazaQuestionIndex + 1) + "/" + questionCount);
             } else {
                 finish();
             }
 
         }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (kotowazaDBHelper != null) {
+            kotowazaDBHelper.close();
+        }
+    }
     }
 
 
