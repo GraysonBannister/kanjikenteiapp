@@ -81,18 +81,18 @@ public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
         onyomiType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTest("onyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
+                startOnyomiTest("onyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
 
             }
 
 
 
         });
-
+//starts kunyomi typed test
         kunyomiType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTest("kunyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
+                startKunyomiTest("kunyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
             }
         });
 
@@ -100,7 +100,7 @@ public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
 
     }
 
-    private void startTest(String testType, int questionCount){
+    private void startOnyomiTest(String testType, int questionCount){
         Intent intent = new Intent(onyomiAndKunyomiTestSelection.this, onyomiTest.class);
         intent.putExtra("test_type", testType);
         intent.putExtra("question_count", questionCount);
@@ -109,11 +109,24 @@ public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
         }else{
             onyomiAndKunyomiQuestionCount.setText("問題数を選んだでください。");
         }
+
+
     }
 
 
 
+    private void startKunyomiTest(String testType, int questionCount){
+        Intent intent = new Intent(onyomiAndKunyomiTestSelection.this, kunyomiTest.class);
+        intent.putExtra("test_type", testType);
+        intent.putExtra("question_count", questionCount);
+        if(questionCount > 0){
+            startActivity(intent);
+        }else{
+            onyomiAndKunyomiQuestionCount.setText("問題数を選んだでください。");
+        }
 
+
+    }
 
 
 }
