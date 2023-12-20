@@ -6,6 +6,119 @@
     android:layout_height="match_parent"
     android:background="#EFEEEA">
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/levelChipGroup"
+        android:layout_width="380dp"
+        android:layout_height="154dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="55dp"
+        android:layout_marginBottom="50dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.919">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelTen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="10.0"
+            android:text="10級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelNine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="9.0"
+            android:text="9級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelEight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="8.0"
+            android:text="8級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelSeven"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="7.0"
+            android:text="7級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelSix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="6.0"
+            android:text="6級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelFive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="5.0"
+            android:text="5級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelFour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="4.0"
+            android:text="4級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="3.0"
+            android:text="3級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelTwoHalf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:checked="false"
+            android:tag="2.5"
+            android:text="2.5級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="2.0"
+            android:text="2級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelOneHalf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="1.5"
+            android:text="1.5級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="1.0"
+            android:text="1級" />
+    </com.google.android.material.chip.ChipGroup>
+
     <Button
         android:id="@+id/kunyomiType"
         android:layout_width="175dp"
@@ -85,4 +198,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.596" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

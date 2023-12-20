@@ -50,7 +50,7 @@ public class titleScreen extends AppCompatActivity {
        onyomiAndKunyomiTestButton.setOnClickListener(new View.OnClickListener(){
            @Override
            public void onClick(View v){
-               //startTest("onyomi", questionsNumberSeekBar.getProgress());
+
                Intent intent = new Intent(titleScreen.this, onyomiAndKunyomiTestSelection.class);
                startActivity(intent);
            }

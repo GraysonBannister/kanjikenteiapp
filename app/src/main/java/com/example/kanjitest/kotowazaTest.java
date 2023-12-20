@@ -21,6 +21,7 @@ import android.util.Log;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.view.View;
 import android.widget.ImageButton;
@@ -47,6 +48,8 @@ public class kotowazaTest extends Activity {
     private ImageButton clearDrawingButton;
     private Button submitDrawnKanji;
 
+
+
     //drawing test
     private List<List<List<Float>>> userDrawnKanjiStrokes = new ArrayList<>(4);
 
@@ -69,6 +72,11 @@ public class kotowazaTest extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String testType = getIntent().getStringExtra("test_type");
+
+
+        Boolean levelTen = getIntent().getBooleanExtra("levelTen", false);
+
+
         questionCount = getIntent().getIntExtra("question_count", 10); //default to 10 if not provided
 
         super.onCreate(savedInstanceState);
@@ -83,6 +91,12 @@ public class kotowazaTest extends Activity {
         notificationTextView = findViewById(R.id.kotowazaNotifcation);
         kotowazaDrawCanvas = findViewById(R.id.kotowazaDrawCanvas);
         clearDrawingButton = findViewById(R.id.kotowazaClearDrawingButton);
+
+
+
+
+
+
 
 //database
         kotowazaDBHelper = new kotowazaDatabaseHelper(this);
@@ -139,6 +153,7 @@ public class kotowazaTest extends Activity {
             public void onClick(View v) {
                 String testType = getIntent().getStringExtra("test_type");
                 notificationTextView.setText("");
+                kotowazaDrawCanvas.clearDrawing();
                 //Fix this for kotowazaType
                 if ("kotowazaTest".equals(testType)) {
                     currentkotowazaQuestionIndex++;
@@ -164,8 +179,9 @@ public class kotowazaTest extends Activity {
         });
 
         //Starts Tests
-        if ("kotowazaTest".equals(testType)) {
+        if (levelTen == true) {
             //start kotowazaType test with 'questionCount' questions
+           // kotowazaQuestions = 0,100;
             startKotowazaTest();
 
         } else {

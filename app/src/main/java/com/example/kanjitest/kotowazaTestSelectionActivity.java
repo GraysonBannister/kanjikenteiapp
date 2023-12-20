@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,19 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
     private TextView kotowazaQuestionNumberTitle;
     private TextView kotowazaQuestionCount;
 
+    private CheckBox kotowazaLevelTen;
+    private CheckBox kotowazaLevelNine;
+    private CheckBox kotowazaLevelEight;
+    private CheckBox kotowazaLevelSeven;
+    private CheckBox kotowazaLevelSix;
+    private CheckBox kotowazaLevelFive;
+    private CheckBox kotowazaLevelFour;
+    private CheckBox kotowazaLevelThree;
+    private CheckBox kotowazaLevelTwoHalf;
+    private CheckBox kotowazaLevelTwo;
+    private CheckBox kotowazaLevelOneHalf;
+    private CheckBox kotowazaLevelOne;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +46,19 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
         kotowazaQuestionNumberTitle = findViewById(R.id.kotowazaQuestionNumberTitle);
         kotowazaQuestionCount = findViewById(R.id.kotowazaQuestionCount);
         kotowazaTest = findViewById(R.id.kotowazaTest);
+
+        kotowazaLevelTen = findViewById(R.id.kotowazaLevelTen);
+        kotowazaLevelNine = findViewById(R.id.kotowazaLevelNine);
+        kotowazaLevelEight = findViewById(R.id.kotowazaLevelEight);
+        kotowazaLevelSeven = findViewById(R.id.kotowazaLevelSeven);
+        kotowazaLevelSix = findViewById(R.id.kotowazaLevelSix);
+        kotowazaLevelFive = findViewById(R.id.kotowazaLevelFive);
+        kotowazaLevelFour = findViewById(R.id.kotowazaLevelFour);
+        kotowazaLevelThree = findViewById(R.id.kotowazaLevelThree);
+        kotowazaLevelTwoHalf = findViewById(R.id.kotowazaLevelTwoHalf);
+        kotowazaLevelTwo = findViewById(R.id.kotowazaLevelTwo);
+        kotowazaLevelOneHalf = findViewById(R.id.kotowazaLevelOneHalf);
+        kotowazaLevelOne = findViewById(R.id.kotowazaLevelOne);
 
 
         //Initiate the DatabaseHelper
@@ -73,10 +100,12 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int questionCountValue = kotowazaQuestionSlider.getProgress();
+                boolean levelTenCheckBox = kotowazaLevelTen.isChecked();
                 if(questionCountValue > 0){
                     Intent intent = new Intent(kotowazaTestSelectionActivity.this, kotowazaTest.class);
                     intent.putExtra("test_type", "kotowazaTest");
                     intent.putExtra("question_count", questionCountValue);
+                    intent.putExtra("levelTen", levelTenCheckBox);
                     startActivity(intent);
                 } else {
                     Toast.makeText(kotowazaTestSelectionActivity.this, "問題数を選んでください。", Toast.LENGTH_SHORT).show();

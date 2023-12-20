@@ -1,7 +1,6 @@
 package com.example.kanjitest;
 
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -87,18 +86,17 @@ public class QuestionDAO {
         return entries;
     }
 
-    public List<kunyomiQuestion> getAllKunyomiEntries(){
+    public List<kunyomiQuestion> getAllKunyomiEntries(float rank){
         List<kunyomiQuestion> entries = new ArrayList<>();
 
-        String query = "SELECT rank, kanji, reading, kunyomi FROM kunyomiData";
+        String query = "SELECT kanji, reading, kunyomi FROM kunyomiData WHERE rank = ?";
 
-        Cursor cursor = database.rawQuery(query,null);
+        Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(rank)});
         if(cursor.moveToFirst()){
             do{
-                int rank = cursor.getInt(0);
-                String kanji = cursor.getString(1);
-                String reading = cursor.getString(2);
-                String kunyomi = cursor.getString(3);
+                String kanji = cursor.getString(0);
+                String reading = cursor.getString(1);
+                String kunyomi = cursor.getString(2);
 
                 if(kanji != null && reading != null && kunyomi != null){
                     // Split the reading and kunyomi strings into arrays
@@ -107,12 +105,12 @@ public class QuestionDAO {
 
                     // Check if the arrays lengths match to ensure data integrity
                     if (readingsArray.length == kunyomiArray.length) {
-                        entries.add(new kunyomiQuestion(rank, kanji, readingsArray, kunyomiArray));
+                        entries.add(new kunyomiQuestion(kanji, readingsArray, kunyomiArray));
                     } else {
                         Log.e("KunyomiDAO", "Mismatch in lengths of readings and kunyomi for kanji: " + kanji);
                     }
 
-                    entries.add(new kunyomiQuestion(rank, kanji, readingsArray, kunyomiArray));
+                    entries.add(new kunyomiQuestion(kanji, readingsArray, kunyomiArray));
                 }
 
 

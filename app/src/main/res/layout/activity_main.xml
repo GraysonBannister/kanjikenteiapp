@@ -10,6 +10,22 @@
 
 
     <Button
+        android:id="@+id/yojijukugoTestButton"
+        android:layout_width="175dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="100dp"
+        android:backgroundTint="#4E4F50"
+        android:text="四字熟語"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.627" />
+
+    <Button
         android:id="@+id/jukugoTestButton"
         android:layout_width="175dp"
         android:layout_height="80dp"
@@ -22,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.94" />
+        app:layout_constraintVertical_bias="0.949" />
 
     <Button
         android:id="@+id/kotowazaTestButton"
@@ -37,24 +53,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.77" />
-
-    <Button
-        android:id="@+id/yojijukugoTestButton"
-        android:layout_width="175dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="100dp"
-        android:backgroundTint="#4E4F50"
-        android:text="四字熟語"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.632" />
+        app:layout_constraintTop_toBottomOf="@+id/yojijukugoTestButton"
+        app:layout_constraintVertical_bias="0.075" />
 
     <Button
         android:id="@+id/onyomiTestButton"
@@ -69,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.953" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <TextView
         android:id="@+id/numberofQuestionsTextView"

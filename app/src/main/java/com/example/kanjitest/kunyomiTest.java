@@ -128,8 +128,10 @@ public class kunyomiTest extends Activity {
     }//end of on open
 
     public void startKunyomiTypeTest() {
-        KunyomiQuestions = questionDAO.getAllKunyomiEntries();
-
+        float rank = getIntent().getFloatExtra("rank", 1.0f); // Get the selected level passed from the previous activity
+        KunyomiQuestions = questionDAO.getAllKunyomiEntries(rank); // Use the selected level to filter questions
+        Log.d("kunyomiTestSelection", "Selected Rank: " + rank);
+        Log.d("TestActivity", "Number of Kunyomi Questions " + KunyomiQuestions.size());
         Collections.shuffle(KunyomiQuestions);//randomize question list
 
         if (KunyomiQuestions.size() > questionCount) {//What does this do?
@@ -148,7 +150,7 @@ public class kunyomiTest extends Activity {
         Pair<String, String> kunyomiAndReading = currentQuestion.getRandomKunyomiAndReading();
 
 
-        Log.d("TestActivity", "Number of Kunyomi Questions" + KunyomiQuestions.size());
+
         // Set the current correct answer
         currentCorrectAnswer = kunyomiAndReading.second;
 
