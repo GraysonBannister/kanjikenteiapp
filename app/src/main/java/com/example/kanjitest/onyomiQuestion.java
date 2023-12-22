@@ -12,13 +12,8 @@ public class onyomiQuestion {
         
     }
 
-    public String getKanji(){
-        return  kanji;
-
-    }
-    public String getOnyomi(){
-        return onyomi;
-    }
+    public String getKanji(){return  kanji;}
+    public String getOnyomi(){return onyomi;}
 
 
 }

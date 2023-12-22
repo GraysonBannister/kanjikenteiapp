@@ -128,9 +128,9 @@ public class kunyomiTest extends Activity {
     }//end of on open
 
     public void startKunyomiTypeTest() {
-        float rank = getIntent().getFloatExtra("rank", 1.0f); // Get the selected level passed from the previous activity
-        KunyomiQuestions = questionDAO.getAllKunyomiEntries(rank); // Use the selected level to filter questions
-        Log.d("kunyomiTestSelection", "Selected Rank: " + rank);
+        float[] selectedRanks = getIntent().getFloatArrayExtra("selected_ranks"); // Get the selected level passed from the previous activity
+        KunyomiQuestions = questionDAO.getAllKunyomiEntries(selectedRanks); // Use the selected level to filter questions
+        Log.d("kunyomiTestSelection", "Selected Rank: " + selectedRanks);
         Log.d("TestActivity", "Number of Kunyomi Questions " + KunyomiQuestions.size());
         Collections.shuffle(KunyomiQuestions);//randomize question list
 

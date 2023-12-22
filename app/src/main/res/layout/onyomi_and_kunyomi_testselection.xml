@@ -7,19 +7,16 @@
     android:background="#EFEEEA">
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/levelChipGroup"
-        android:layout_width="380dp"
-        android:layout_height="154dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="50dp"
+        android:id="@+id/jukugoLevelChipGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.919">
+        app:layout_constraintVertical_bias="0.819">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/levelTen"

@@ -15,53 +15,40 @@ public class QuestionDAO {
     public QuestionDAO(SQLiteDatabase database){
         this.database = database;
     }
-    public List<onyomiQuestion> getAllOnyomiQuestions(){
-        List<onyomiQuestion> questions = new ArrayList<>();
-        String query  = "Select kanji, onyomi FROM KanjiData";
 
-        Cursor cursor = database.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            do {
-                String kanji = cursor.getString(0);
-                String onyomi = cursor.getString(1);
-
-                //add each non null value to the list
-                if (kanji != null && onyomi != null){
-                    questions.add(new onyomiQuestion(kanji,onyomi));
-                }
-            } while (cursor.moveToNext());
-        }
-        Log.d("QuestionDAO", "Fetched" + questions.size() + " onyomi questions."); //log the amount of questions fetched
-        cursor.close();
-        return questions;
-    }
-    public List<jukugoQuestion> getAllJukugoQuestions(){
+    public List<jukugoQuestion> getAllJukugoQuestions(float[] ranks){
         List<jukugoQuestion> questions = new ArrayList<>();
-        String query  = "Select usedwords1, usedreadings1, usedwords2, usedreadings2, usedwords3, usedreadings3 FROM KanjiData";
+        StringBuilder queryBuilder = new StringBuilder("SELECT 意味, 言葉, 読み方 FROM allJukugo WHERE rank IN (");
 
-        Cursor cursor = database.rawQuery(query, null);
+        for (int i = 0; i < ranks.length; i++){
+            queryBuilder.append("?");
+            if(i < ranks.length - 1){
+                queryBuilder.append(", ");
+            }
+        }
+
+        queryBuilder.append(")");
+        String[] rankStrings = new String[ranks.length];
+        for (int i = 0; i < ranks.length; i++){
+            rankStrings[i] = String.valueOf(ranks[i]);
+        }
+
+        Cursor cursor = database.rawQuery(queryBuilder.toString(), rankStrings);
         if (cursor.moveToFirst()) {
             do {
-                String jukugo1 = cursor.getString(0);
-                String reading1 = cursor.getString(1);
-                String jukugo2 = cursor.getString(2);
-                String reading2 = cursor.getString(3);
-                String jukugo3 = cursor.getString(4);
-                String reading3 = cursor.getString(5);
+                String 意味 = cursor.getString(0);
+                String 言葉 = cursor.getString(1);
+                String 読み方 = cursor.getString(2);
+
 
                 // Add each non-null question to the list
-                if (jukugo1 != null && reading1 != null) {
-                    questions.add(new jukugoQuestion(jukugo1, reading1));
+                if (意味 != null && 言葉 != null && 読み方 != null) {
+                    questions.add(new jukugoQuestion(意味, 言葉, 読み方));
                 }
-                if (jukugo2 != null && reading2 != null) {
-                    questions.add(new jukugoQuestion(jukugo2, reading2));
-                }
-                if (jukugo3 != null && reading3 != null) {
-                    questions.add(new jukugoQuestion(jukugo3, reading3));
-                }
+
             } while (cursor.moveToNext());
         }
-        Log.d("QuestionDAO" , "Fetched " + questions.size() + " jukugo questions."); //log the amount of questions fetched
+        Log.d("jukugoDAO" , "Fetched " + questions.size() + " jukugo questions."); //log the amount of questions fetched
         cursor.close();
         return questions;
     }
@@ -85,13 +72,63 @@ public class QuestionDAO {
         cursor.close();
         return entries;
     }
+    public List<onyomiQuestion> getAllOnyomiQuestions(float[] ranks){
+        List<onyomiQuestion> questions = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder("SELECT number, kanji, onyomi FROM kanjiOnyomi WHERE rank IN (");
 
-    public List<kunyomiQuestion> getAllKunyomiEntries(float rank){
+        for (int i = 0; i < ranks.length; i++){
+            queryBuilder.append("?");
+            if(i < ranks.length - 1){
+                queryBuilder.append(", ");
+            }
+        }
+
+        queryBuilder.append(")");
+        String[] rankStrings = new String[ranks.length];
+        for (int i = 0; i < ranks.length; i++){
+            rankStrings[i] = String.valueOf(ranks[i]);
+        }
+
+        Cursor cursor = database.rawQuery(queryBuilder.toString(), rankStrings);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int number = cursor.getInt(0);
+                String kanji = cursor.getString(1);
+                String onyomi = cursor.getString(2);
+
+                //add each non null value to the list
+                if (kanji != null && onyomi != null){
+                    questions.add(new onyomiQuestion(kanji,onyomi));
+                }
+                else {
+                    Log.e("onyomiDAO", "Mismatch in lengths of readings and onyomi for kanji: " + kanji);
+                }
+            } while (cursor.moveToNext());
+        }
+
+
+        Log.d("QuestionDAO", "Fetched" + questions.size() + " onyomi questions."); //log the amount of questions fetched
+        cursor.close();
+        return questions;
+    }
+    public List<kunyomiQuestion> getAllKunyomiEntries(float[] ranks){
         List<kunyomiQuestion> entries = new ArrayList<>();
 
-        String query = "SELECT kanji, reading, kunyomi FROM kunyomiData WHERE rank = ?";
+        StringBuilder queryBuilder = new StringBuilder("SELECT kanji, reading, kunyomi FROM kunyomiData WHERE rank IN (");
+        for (int i = 0; i < ranks.length; i++){
+            queryBuilder.append("?");
+            if(i < ranks.length - 1){
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(")");
+        String[] rankStrings = new String[ranks.length];
+        for (int i = 0; i < ranks.length; i++){
+            rankStrings[i] = String.valueOf(ranks[i]);
+        }
 
-        Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(rank)});
+        Cursor cursor = database.rawQuery(queryBuilder.toString(), rankStrings);
         if(cursor.moveToFirst()){
             do{
                 String kanji = cursor.getString(0);
