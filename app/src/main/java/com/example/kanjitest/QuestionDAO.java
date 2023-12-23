@@ -18,7 +18,7 @@ public class QuestionDAO {
 
     public List<jukugoQuestion> getAllJukugoQuestions(float[] ranks){
         List<jukugoQuestion> questions = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT 意味, 言葉, 読み方 FROM allJukugo WHERE rank IN (");
+        StringBuilder queryBuilder = new StringBuilder("SELECT definition, reading, word FROM allJukugo WHERE rank IN (");
 
         for (int i = 0; i < ranks.length; i++){
             queryBuilder.append("?");
@@ -36,14 +36,16 @@ public class QuestionDAO {
         Cursor cursor = database.rawQuery(queryBuilder.toString(), rankStrings);
         if (cursor.moveToFirst()) {
             do {
-                String 意味 = cursor.getString(0);
-                String 言葉 = cursor.getString(1);
-                String 読み方 = cursor.getString(2);
+                String definition = cursor.getString(0);
 
+                String reading = cursor.getString(1);
+                String word = cursor.getString(2);
 
                 // Add each non-null question to the list
-                if (意味 != null && 言葉 != null && 読み方 != null) {
-                    questions.add(new jukugoQuestion(意味, 言葉, 読み方));
+                if (definition != null && word != null && reading != null) {
+                    questions.add(new jukugoQuestion(definition, word, reading));
+                }else {
+                    Log.e("jukugoDAO", "Mismatch in lengths of readings and onyomi for kanji: " + word);
                 }
 
             } while (cursor.moveToNext());

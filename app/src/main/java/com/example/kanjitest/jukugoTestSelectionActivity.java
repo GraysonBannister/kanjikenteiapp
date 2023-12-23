@@ -47,10 +47,10 @@ public class jukugoTestSelectionActivity extends AppCompatActivity {
         levelChipGroup = findViewById(R.id.jukugoLevelChipGroup);
 
         //Initiate the DatabaseHelper
-        jukugoDatabaseHelper kanjiDatabaseHelper = new jukugoDatabaseHelper(this);
+        jukugoDatabaseHelper jukugoDatabaseHelper = new jukugoDatabaseHelper(this);
 
         try {
-            kanjiDatabaseHelper.createDatabase();
+            jukugoDatabaseHelper.createDatabase();
         } catch (IOException ioe) {
             Toast.makeText(this, "データベース構築中に問題が発生しました。", Toast.LENGTH_SHORT).show();
         }

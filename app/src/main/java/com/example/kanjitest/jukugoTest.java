@@ -151,8 +151,20 @@ public class jukugoTest extends Activity {
         questionTextView.setText(currentQuestion.getJukugo());
         updateQuestionCounter();
     }
-
+    private String convertHiraganaToKatakana(String hiragana) {
+        StringBuilder katakana = new StringBuilder();
+        for (char ch : hiragana.toCharArray()) {
+            if (ch >= 'ぁ' && ch <= 'ん') {
+                katakana.append((char) (ch - 'ぁ' + 'ァ'));
+            } else {
+                katakana.append(ch);
+            }
+        }
+        return katakana.toString();
+    }
     public void checkjukugoTypeAnswer(String userAnswer) {
+       // String convertedUserAnswer = convertHiraganaToKatakana(userAnswer);
+
         String correctAnswer = jukugoQuestions.get(currentjukugoQuestionIndex).getReading();
         String[] jukugoArray = correctAnswer.split(",");
 

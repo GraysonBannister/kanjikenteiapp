@@ -21,7 +21,7 @@
             android:theme="@style/Theme.KanjiTest" />
         <activity
             android:name=".jukugoTestSelectionActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".YojijukugoTestSelectionActivity"
             android:exported="true" />
