@@ -4,14 +4,22 @@ package com.example.kanjitest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
     private Button onyomiType;
@@ -23,7 +31,10 @@ public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
     private SeekBar onyomiAndKunyomiQuestionSlider;
     private TextView onyomiAndKunyomiQuestionNumberTitle;
     private TextView onyomiAndKunyomiQuestionCount;
+    private ChipGroup levelChipGroup;
+    private float currentSelectedRank = 5.0f; // Default rank
 
+    private List<Float> selectedRanks = new ArrayList<>(); // Store multiple ranks
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -37,6 +48,8 @@ public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
         onyomiType = findViewById(R.id.onyomiType);
 
         kunyomiType =findViewById(R.id.kunyomiType);
+        levelChipGroup = findViewById(R.id.jukugoLevelChipGroup);
+
 
 
 
@@ -77,56 +90,81 @@ public class onyomiAndKunyomiTestSelection extends AppCompatActivity {
                 finish();
             }
         });
+
+        levelChipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+                selectedRanks.clear(); // Clear the list for new selections
+                for (int id : checkedIds) {
+                    if (!checkedIds.isEmpty()) {
+                        // Get the ID of the last selected chip
+                        Chip selectedChip = findViewById(id);
+                        if (selectedChip != null) {
+                            try {
+                                float rank = Float.parseFloat(selectedChip.getTag().toString());
+                                selectedRanks.add(rank); // Add rank to the list
+                                Log.d("ChipGroup", "Selected rank: " + rank);
+                            } catch (NumberFormatException e) {
+                                Log.e("ChipGroup", "Error parsing chip tag to float", e);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         //Starts typed onyomi test
         onyomiType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startOnyomiTest("onyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
-
+                int questionCountValue = onyomiAndKunyomiQuestionSlider.getProgress();
+                if(questionCountValue > 0){
+                    Intent intent = new Intent(onyomiAndKunyomiTestSelection.this, onyomiTest.class);
+                    intent.putExtra("test_type", "onyomiType");
+                    intent.putExtra("question_count", questionCountValue);
+                    // Convert List<Float> to float[]
+                    float[] ranksArray = new float[selectedRanks.size()];
+                    for (int i = 0; i < selectedRanks.size(); i++) {
+                        ranksArray[i] = selectedRanks.get(i);
+                    }
+                    intent.putExtra("selected_ranks", ranksArray);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(onyomiAndKunyomiTestSelection.this, "問題数を選んでください。", Toast.LENGTH_SHORT).show();
+                }
             }
-
-
-
         });
-//starts kunyomi typed test
+
         kunyomiType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startKunyomiTest("kunyomiType", onyomiAndKunyomiQuestionSlider.getProgress());
+                int questionCountValue = onyomiAndKunyomiQuestionSlider.getProgress();
+                if(questionCountValue > 0){
+                    Intent intent = new Intent(onyomiAndKunyomiTestSelection.this, kunyomiTest.class);
+                    intent.putExtra("test_type", "kunyomiType");
+                    intent.putExtra("question_count", questionCountValue);
+                    // Convert List<Float> to float[]
+                    float[] ranksArray = new float[selectedRanks.size()];
+                    for (int i = 0; i < selectedRanks.size(); i++) {
+                        ranksArray[i] = selectedRanks.get(i);
+                    }
+                    intent.putExtra("selected_ranks", ranksArray);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(onyomiAndKunyomiTestSelection.this, "問題数を選んでください。", Toast.LENGTH_SHORT).show();
+                }
             }
+
         });
 
         //Add onyomi drawn test? or something else?
 
     }
 
-    private void startOnyomiTest(String testType, int questionCount){
-        Intent intent = new Intent(onyomiAndKunyomiTestSelection.this, onyomiTest.class);
-        intent.putExtra("test_type", testType);
-        intent.putExtra("question_count", questionCount);
-        if(questionCount > 0){
-            startActivity(intent);
-        }else{
-            onyomiAndKunyomiQuestionCount.setText("問題数を選んだでください。");
-        }
-
-
-    }
 
 
 
-    private void startKunyomiTest(String testType, int questionCount){
-        Intent intent = new Intent(onyomiAndKunyomiTestSelection.this, kunyomiTest.class);
-        intent.putExtra("test_type", testType);
-        intent.putExtra("question_count", questionCount);
-        if(questionCount > 0){
-            startActivity(intent);
-        }else{
-            onyomiAndKunyomiQuestionCount.setText("問題数を選んだでください。");
-        }
 
-
-    }
 
 
 }

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EFEEEA"
+    tools:context=".kotowazaTestSelectionActivity">
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelOneHalf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="28dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelOne"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelFour"
+        tools:text="1.5" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="235dp"
+        android:layout_marginTop="170dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="1" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="68dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelSix"
+        tools:text="2" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelTwoHalf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelTwo"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelSeven"
+        tools:text="2.5" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelFive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelFour"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelTen"
+        tools:text="5" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelTwoHalf"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelEight"
+        tools:text="3" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelThree"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelNine"
+        tools:text="4" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelSeven"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelSix"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
+        tools:text="7" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelSix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="68dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
+        tools:text="6" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelEight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="12dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelSeven"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
+        tools:text="8" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelNine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelEight"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
+        tools:text="9" />
+
+    <Button
+        android:id="@+id/kotowazaTest"
+        android:layout_width="175dp"
+        android:layout_height="80dp"
+        android:backgroundTint="#4E4F50"
+        android:text="はじめる"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.387" />
+
+    <Button
+        android:id="@+id/kotowazaBack"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:backgroundTint="#4E4F50"
+        android:text="戻る"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.141"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.086" />
+
+    <TextView
+        android:id="@+id/kotowazaQuestionCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#2C2B2B"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.614" />
+
+    <TextView
+        android:id="@+id/kotowazaQuestionNumberTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/質問数"
+        android:textColor="#2C2B2B"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.517" />
+
+    <SeekBar
+        android:id="@+id/kotowazaQuestionSlider"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.571" />
+
+    <CheckBox
+        android:id="@+id/kotowazaLevelTen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelNine"
+        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
+        tools:text="10" />
+</androidx.constraintlayout.widget.ConstraintLayout>

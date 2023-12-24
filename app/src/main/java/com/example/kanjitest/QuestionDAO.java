@@ -1,7 +1,6 @@
 package com.example.kanjitest;
 
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -16,53 +15,42 @@ public class QuestionDAO {
     public QuestionDAO(SQLiteDatabase database){
         this.database = database;
     }
-    public List<onyomiQuestion> getAllOnyomiQuestions(){
-        List<onyomiQuestion> questions = new ArrayList<>();
-        String query  = "Select kanji, onyomi FROM KanjiData";
 
-        Cursor cursor = database.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            do {
-                String kanji = cursor.getString(0);
-                String onyomi = cursor.getString(1);
-
-                //add each non null value to the list
-                if (kanji != null && onyomi != null){
-                    questions.add(new onyomiQuestion(kanji,onyomi));
-                }
-            } while (cursor.moveToNext());
-        }
-        Log.d("QuestionDAO", "Fetched" + questions.size() + " onyomi questions."); //log the amount of questions fetched
-        cursor.close();
-        return questions;
-    }
-    public List<jukugoQuestion> getAllJukugoQuestions(){
+    public List<jukugoQuestion> getAllJukugoQuestions(float[] ranks){
         List<jukugoQuestion> questions = new ArrayList<>();
-        String query  = "Select usedwords1, usedreadings1, usedwords2, usedreadings2, usedwords3, usedreadings3 FROM KanjiData";
+        StringBuilder queryBuilder = new StringBuilder("SELECT definition, reading, word FROM allJukugo WHERE rank IN (");
 
-        Cursor cursor = database.rawQuery(query, null);
+        for (int i = 0; i < ranks.length; i++){
+            queryBuilder.append("?");
+            if(i < ranks.length - 1){
+                queryBuilder.append(", ");
+            }
+        }
+
+        queryBuilder.append(")");
+        String[] rankStrings = new String[ranks.length];
+        for (int i = 0; i < ranks.length; i++){
+            rankStrings[i] = String.valueOf(ranks[i]);
+        }
+
+        Cursor cursor = database.rawQuery(queryBuilder.toString(), rankStrings);
         if (cursor.moveToFirst()) {
             do {
-                String jukugo1 = cursor.getString(0);
-                String reading1 = cursor.getString(1);
-                String jukugo2 = cursor.getString(2);
-                String reading2 = cursor.getString(3);
-                String jukugo3 = cursor.getString(4);
-                String reading3 = cursor.getString(5);
+                String definition = cursor.getString(0);
+
+                String reading = cursor.getString(1);
+                String word = cursor.getString(2);
 
                 // Add each non-null question to the list
-                if (jukugo1 != null && reading1 != null) {
-                    questions.add(new jukugoQuestion(jukugo1, reading1));
+                if (definition != null && word != null && reading != null) {
+                    questions.add(new jukugoQuestion(definition, word, reading));
+                }else {
+                    Log.e("jukugoDAO", "Mismatch in lengths of readings and onyomi for kanji: " + word);
                 }
-                if (jukugo2 != null && reading2 != null) {
-                    questions.add(new jukugoQuestion(jukugo2, reading2));
-                }
-                if (jukugo3 != null && reading3 != null) {
-                    questions.add(new jukugoQuestion(jukugo3, reading3));
-                }
+
             } while (cursor.moveToNext());
         }
-        Log.d("QuestionDAO" , "Fetched " + questions.size() + " jukugo questions."); //log the amount of questions fetched
+        Log.d("jukugoDAO" , "Fetched " + questions.size() + " jukugo questions."); //log the amount of questions fetched
         cursor.close();
         return questions;
     }
@@ -86,22 +74,82 @@ public class QuestionDAO {
         cursor.close();
         return entries;
     }
+    public List<onyomiQuestion> getAllOnyomiQuestions(float[] ranks){
+        List<onyomiQuestion> questions = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder("SELECT number, kanji, onyomi FROM kanjiOnyomi WHERE rank IN (");
 
-    public List<kunyomiQuestion> getAllKunyomiEntries(){
+        for (int i = 0; i < ranks.length; i++){
+            queryBuilder.append("?");
+            if(i < ranks.length - 1){
+                queryBuilder.append(", ");
+            }
+        }
+
+        queryBuilder.append(")");
+        String[] rankStrings = new String[ranks.length];
+        for (int i = 0; i < ranks.length; i++){
+            rankStrings[i] = String.valueOf(ranks[i]);
+        }
+
+        Cursor cursor = database.rawQuery(queryBuilder.toString(), rankStrings);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int number = cursor.getInt(0);
+                String kanji = cursor.getString(1);
+                String onyomi = cursor.getString(2);
+
+                //add each non null value to the list
+                if (kanji != null && onyomi != null){
+                    questions.add(new onyomiQuestion(kanji,onyomi));
+                }
+                else {
+                    Log.e("onyomiDAO", "Mismatch in lengths of readings and onyomi for kanji: " + kanji);
+                }
+            } while (cursor.moveToNext());
+        }
+
+
+        Log.d("QuestionDAO", "Fetched" + questions.size() + " onyomi questions."); //log the amount of questions fetched
+        cursor.close();
+        return questions;
+    }
+    public List<kunyomiQuestion> getAllKunyomiEntries(float[] ranks){
         List<kunyomiQuestion> entries = new ArrayList<>();
 
-        String query = "SELECT rank, kanji, reading, kunyomi FROM kunyomData";
+        StringBuilder queryBuilder = new StringBuilder("SELECT kanji, reading, kunyomi FROM kunyomiData WHERE rank IN (");
+        for (int i = 0; i < ranks.length; i++){
+            queryBuilder.append("?");
+            if(i < ranks.length - 1){
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(")");
+        String[] rankStrings = new String[ranks.length];
+        for (int i = 0; i < ranks.length; i++){
+            rankStrings[i] = String.valueOf(ranks[i]);
+        }
 
-        Cursor cursor = database.rawQuery(query,null);
+        Cursor cursor = database.rawQuery(queryBuilder.toString(), rankStrings);
         if(cursor.moveToFirst()){
             do{
-                int rank = cursor.getInt(0);
-                String kanji = cursor.getString(1);
-                String reading = cursor.getString(2);
-                String kunyomi = cursor.getString(3);
+                String kanji = cursor.getString(0);
+                String reading = cursor.getString(1);
+                String kunyomi = cursor.getString(2);
 
                 if(kanji != null && reading != null && kunyomi != null){
-                    entries.add(new kunyomiQuestion(rank, kanji, reading, kunyomi));
+                    // Split the reading and kunyomi strings into arrays
+                    String[] readingsArray = reading.split(",");
+                    String[] kunyomiArray = kunyomi.split(",");
+
+                    // Check if the arrays lengths match to ensure data integrity
+                    if (readingsArray.length == kunyomiArray.length) {
+                        entries.add(new kunyomiQuestion(kanji, readingsArray, kunyomiArray));
+                    } else {
+                        Log.e("KunyomiDAO", "Mismatch in lengths of readings and kunyomi for kanji: " + kanji);
+                    }
+
+                    entries.add(new kunyomiQuestion(kanji, readingsArray, kunyomiArray));
                 }
 
 
@@ -114,6 +162,27 @@ public class QuestionDAO {
 
 
 
+    }
+
+    public List<kotowazaQuestion> getAllKotowazaEntries(){
+        List<kotowazaQuestion> entries =  new ArrayList<>();
+
+        String query = "SELECT kotowaza, answer FROM kotowaza";
+
+        Cursor cursor = database.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            do{
+                String kotowaza = cursor.getString(0);
+                String answer = cursor.getString(1);
+
+                if (kotowaza != null && answer != null){
+                    entries.add(new kotowazaQuestion(kotowaza, answer));
+                }
+            }while(cursor.moveToNext());
+        }
+        Log.d("KotowazaDOA", "Fetched" + entries.size() + "kotowza entries.");
+        cursor.close();
+        return entries;
     }
 
 }

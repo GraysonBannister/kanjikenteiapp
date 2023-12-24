@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "KanjiDatabasev3.db";
+    private static final String DB_NAME = "kanjiOnyomi.db";
     private final String DB_PATH;
     private SQLiteDatabase myDatabase;
     private final Context myContext;

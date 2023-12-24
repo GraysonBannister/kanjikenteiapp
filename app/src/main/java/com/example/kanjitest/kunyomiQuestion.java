@@ -7,14 +7,13 @@ import java.util.Random;
 public class kunyomiQuestion {
     private String[] kunyomi;
     private String[] reading;
-    private Integer rank;
+
     private String kanji;
 
 
-    public kunyomiQuestion(Integer rank, String kanji, String[] reading, String[] kunyomi) {
+    public kunyomiQuestion(String kanji, String[] reading, String[] kunyomi) {
         this.kunyomi = kunyomi;
         this.reading = reading;
-        this.rank = rank;
         this.kanji = kanji;
 
 
@@ -30,9 +29,6 @@ public class kunyomiQuestion {
         return reading;
     }
 
-    public Integer getRank(){
-        return rank;
-    }
     public String getKanji(){
         return kanji;
     }

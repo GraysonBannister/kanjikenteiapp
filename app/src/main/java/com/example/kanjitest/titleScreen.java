@@ -16,6 +16,7 @@ public class titleScreen extends AppCompatActivity {
    private Button onyomiAndKunyomiTestButton;
    private Button jukugoTestButton;
    private Button yojijukugoTestButton;
+   private Button kotowazaTestButton;
 
    @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -25,6 +26,7 @@ public class titleScreen extends AppCompatActivity {
        onyomiAndKunyomiTestButton = findViewById(R.id.onyomiTestButton);
         jukugoTestButton = findViewById(R.id.jukugoTestButton);
         yojijukugoTestButton = findViewById(R.id.yojijukugoTestButton);
+       kotowazaTestButton = findViewById(R.id.kotowazaTestButton);
 
 
        //Initiate the DatabaseHelper
@@ -48,7 +50,7 @@ public class titleScreen extends AppCompatActivity {
        onyomiAndKunyomiTestButton.setOnClickListener(new View.OnClickListener(){
            @Override
            public void onClick(View v){
-               //startTest("onyomi", questionsNumberSeekBar.getProgress());
+
                Intent intent = new Intent(titleScreen.this, onyomiAndKunyomiTestSelection.class);
                startActivity(intent);
            }
@@ -67,6 +69,13 @@ public class titleScreen extends AppCompatActivity {
            @Override
            public void onClick(View v){
                Intent intent = new Intent(titleScreen.this, YojijukugoTestSelectionActivity.class);
+               startActivity(intent);
+           }
+       });
+       kotowazaTestButton.setOnClickListener(new View.OnClickListener(){
+           @Override
+           public void onClick(View v){
+               Intent intent = new Intent(titleScreen.this, kotowazaTestSelectionActivity.class);
                startActivity(intent);
            }
        });

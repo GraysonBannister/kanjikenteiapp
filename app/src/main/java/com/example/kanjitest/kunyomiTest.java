@@ -128,8 +128,10 @@ public class kunyomiTest extends Activity {
     }//end of on open
 
     public void startKunyomiTypeTest() {
-        KunyomiQuestions = questionDAO.getAllKunyomiEntries();
-
+        float[] selectedRanks = getIntent().getFloatArrayExtra("selected_ranks"); // Get the selected level passed from the previous activity
+        KunyomiQuestions = questionDAO.getAllKunyomiEntries(selectedRanks); // Use the selected level to filter questions
+        Log.d("kunyomiTestSelection", "Selected Rank: " + selectedRanks);
+        Log.d("TestActivity", "Number of Kunyomi Questions " + KunyomiQuestions.size());
         Collections.shuffle(KunyomiQuestions);//randomize question list
 
         if (KunyomiQuestions.size() > questionCount) {//What does this do?
@@ -148,7 +150,7 @@ public class kunyomiTest extends Activity {
         Pair<String, String> kunyomiAndReading = currentQuestion.getRandomKunyomiAndReading();
 
 
-        Log.d("TestActivity", "Number of Kunyomi Questions" + KunyomiQuestions.size());
+
         // Set the current correct answer
         currentCorrectAnswer = kunyomiAndReading.second;
 
@@ -163,9 +165,9 @@ public class kunyomiTest extends Activity {
 
         boolean isCorrect = userAnswer.trim().equals(currentCorrectAnswer.trim());
 
-            if (userAnswer.trim().equals(currentCorrectAnswer.trim())) {
-                isCorrect = true;
-            }
+        if (userAnswer.trim().equals(currentCorrectAnswer.trim())) {
+            isCorrect = true;
+        }
 
 
 
@@ -224,4 +226,3 @@ public class kunyomiTest extends Activity {
         }
     }
 }//end of class
-

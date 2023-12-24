@@ -25,6 +25,7 @@ import android.os.Handler;
 
 
 public class Test extends Activity {
+    /*
     //UI interface features
     private TextView questionTextView;
     private EditText answerEditText;
@@ -174,8 +175,11 @@ public class Test extends Activity {
 
 
     public void startOnyomiTest() {
-        onyomiQuestions = questionDAO.getAllOnyomiQuestions();
+        float[] selectedRanks = getIntent().getFloatArrayExtra("selected_ranks"); // Get the selected level passed from the previous activity
 
+        onyomiQuestions = questionDAO.getAllOnyomiQuestions(selectedRanks);
+        Log.d("onyomiTestSelection", "Selected Rank: " + selectedRanks);
+        Log.d("TestActivity", "Number of Onyomi Questions " + onyomiQuestions.size());
         Collections.shuffle(onyomiQuestions); //randomize questions asked
 
         if (onyomiQuestions.size() > questionCount) {
@@ -448,7 +452,7 @@ public class Test extends Activity {
     }
 
 
-
+*/
 
     }
 

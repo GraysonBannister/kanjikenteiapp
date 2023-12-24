@@ -131,7 +131,10 @@ public class onyomiTest extends Activity {
     }//end of on open
 
     public void startOnyomiTypeTest() {
-        onyomiQuestions = questionDAO.getAllOnyomiQuestions();
+        float[] selectedRanks = getIntent().getFloatArrayExtra("selected_ranks"); // Get the selected level passed from the previous activity
+        onyomiQuestions = questionDAO.getAllOnyomiQuestions(selectedRanks);
+        Log.d("onyomiTestSelection", "Selected Rank: " + selectedRanks);
+        Log.d("TestActivity", "Number of Onyomi Questions " + onyomiQuestions.size());
 
         Collections.shuffle(onyomiQuestions);//randomize question list
 
@@ -153,14 +156,28 @@ public class onyomiTest extends Activity {
         questionTextView.setText(currentQuestion.getKanji());
         updateQuestionCounter();
     }
+//conver user hiragana answer to katakana to match onyomi data that is in katakana
+
+    private String convertHiraganaToKatakana(String hiragana) {
+        StringBuilder katakana = new StringBuilder();
+        for (char ch : hiragana.toCharArray()) {
+            if (ch >= 'ぁ' && ch <= 'ん') {
+                katakana.append((char) (ch - 'ぁ' + 'ァ'));
+            } else {
+                katakana.append(ch);
+            }
+        }
+        return katakana.toString();
+    }
 
     public void checkOnyomiTypeAnswer(String userAnswer) {
+        String convertedUserAnswer = convertHiraganaToKatakana(userAnswer);
         String correctAnswer = onyomiQuestions.get(currentOnyomiQuestionIndex).getOnyomi();
-        String[] onyomiArray = correctAnswer.split(",");
+        String[] onyomiArray = correctAnswer.split("、");
 
         boolean isCorrect = false;
         for (String onyomi : onyomiArray) {
-            if (userAnswer.trim().equals(onyomi.trim())) {
+            if (convertedUserAnswer.trim().equals(onyomi.trim())) {
                 isCorrect = true;
                 break;
             }

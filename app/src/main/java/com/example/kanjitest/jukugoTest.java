@@ -39,7 +39,7 @@ public class jukugoTest extends Activity {
     private int jukugoWrongAnswersCount = 0;
 
     //database var
-    private DatabaseHelper dbHelper;
+    private jukugoDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -57,7 +57,7 @@ public class jukugoTest extends Activity {
         questionCounterTextView = findViewById(R.id.jukugoTestQuestionCount);
         notificationTextView = findViewById(R.id.jukugoNotification);
 
-        dbHelper = new DatabaseHelper(this);
+        dbHelper = new jukugoDatabaseHelper(this);
 
         try {
             dbHelper.openDatabase();
@@ -125,7 +125,11 @@ public class jukugoTest extends Activity {
     }//end of on open
 
     public void startjukugoTypeTest() {
-        jukugoQuestions = questionDAO.getAllJukugoQuestions();
+        float[] selectedRanks = getIntent().getFloatArrayExtra("selected_ranks"); // Get the selected level passed from the previous activity
+
+        jukugoQuestions = questionDAO.getAllJukugoQuestions(selectedRanks);
+        Log.d("jukugoTestSelection", "Selected Rank: " + selectedRanks);
+        Log.d("TestActivity", "Number of Jukugo Questions " + jukugoQuestions.size());
 
         Collections.shuffle(jukugoQuestions);//randomize question list
 
@@ -143,12 +147,24 @@ public class jukugoTest extends Activity {
 
     public void displayjukugoTypeQuestion() {
         jukugoQuestion currentQuestion = jukugoQuestions.get(currentjukugoQuestionIndex);
-        Log.d("TestActivity", "Number of jukugo Questions" + jukugoQuestions.size());
+        Log.d("TestActivity", "Number of jukugo Questions " + jukugoQuestions.size());
         questionTextView.setText(currentQuestion.getJukugo());
         updateQuestionCounter();
     }
-
+    private String convertHiraganaToKatakana(String hiragana) {
+        StringBuilder katakana = new StringBuilder();
+        for (char ch : hiragana.toCharArray()) {
+            if (ch >= 'ぁ' && ch <= 'ん') {
+                katakana.append((char) (ch - 'ぁ' + 'ァ'));
+            } else {
+                katakana.append(ch);
+            }
+        }
+        return katakana.toString();
+    }
     public void checkjukugoTypeAnswer(String userAnswer) {
+       // String convertedUserAnswer = convertHiraganaToKatakana(userAnswer);
+
         String correctAnswer = jukugoQuestions.get(currentjukugoQuestionIndex).getReading();
         String[] jukugoArray = correctAnswer.split(",");
 
