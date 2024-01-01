@@ -15,6 +15,9 @@
         android:theme="@style/Theme.KanjiTest"
         tools:targetApi="34" >
         <activity
+            android:name=".kotowazaTestReview"
+            android:exported="false" />
+        <activity
             android:name=".kotowazaTestSelectionActivity"
             android:exported="true"
             android:label="@string/title_activity_kotowaza_test_selection"

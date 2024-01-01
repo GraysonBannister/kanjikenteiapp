@@ -514,10 +514,19 @@ private String getKanjiUnicode(String kanji){
 
             super(context, attrs);
             setupDrawing();
-            strokes = new ArrayList<List<Float>>();
+            strokes = new ArrayList<>();
 
 
         }
+
+        public Bitmap getDrawing() {
+            // Create a copy of the canvas bitmap to avoid altering the original drawing
+            Bitmap drawingBitmap = Bitmap.createBitmap(canvasBitmap.getWidth(), canvasBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(drawingBitmap);
+            canvas.drawBitmap(canvasBitmap, 0, 0, null);
+            return drawingBitmap;
+        }
+
         private void setupDrawing() {
             drawPath = new Path();
             drawPaint = new Paint();

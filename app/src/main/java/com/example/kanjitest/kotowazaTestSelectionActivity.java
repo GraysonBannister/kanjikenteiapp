@@ -1,9 +1,11 @@
 package com.example.kanjitest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,7 +13,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class kotowazaTestSelectionActivity extends AppCompatActivity {
 
@@ -21,19 +28,9 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
     private SeekBar kotowazaQuestionSlider;
     private TextView kotowazaQuestionNumberTitle;
     private TextView kotowazaQuestionCount;
+    private ChipGroup levelChipGroup;
 
-    private CheckBox kotowazaLevelTen;
-    private CheckBox kotowazaLevelNine;
-    private CheckBox kotowazaLevelEight;
-    private CheckBox kotowazaLevelSeven;
-    private CheckBox kotowazaLevelSix;
-    private CheckBox kotowazaLevelFive;
-    private CheckBox kotowazaLevelFour;
-    private CheckBox kotowazaLevelThree;
-    private CheckBox kotowazaLevelTwoHalf;
-    private CheckBox kotowazaLevelTwo;
-    private CheckBox kotowazaLevelOneHalf;
-    private CheckBox kotowazaLevelOne;
+    private List<Float> selectedRanks = new ArrayList<>(); // Store multiple ranks
 
 
     @Override
@@ -47,18 +44,8 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
         kotowazaQuestionCount = findViewById(R.id.kotowazaQuestionCount);
         kotowazaTest = findViewById(R.id.kotowazaTest);
 
-        kotowazaLevelTen = findViewById(R.id.kotowazaLevelTen);
-        kotowazaLevelNine = findViewById(R.id.kotowazaLevelNine);
-        kotowazaLevelEight = findViewById(R.id.kotowazaLevelEight);
-        kotowazaLevelSeven = findViewById(R.id.kotowazaLevelSeven);
-        kotowazaLevelSix = findViewById(R.id.kotowazaLevelSix);
-        kotowazaLevelFive = findViewById(R.id.kotowazaLevelFive);
-        kotowazaLevelFour = findViewById(R.id.kotowazaLevelFour);
-        kotowazaLevelThree = findViewById(R.id.kotowazaLevelThree);
-        kotowazaLevelTwoHalf = findViewById(R.id.kotowazaLevelTwoHalf);
-        kotowazaLevelTwo = findViewById(R.id.kotowazaLevelTwo);
-        kotowazaLevelOneHalf = findViewById(R.id.kotowazaLevelOneHalf);
-        kotowazaLevelOne = findViewById(R.id.kotowazaLevelOne);
+        levelChipGroup = findViewById(R.id.kotowazaLevelChipGroup);
+
 
 
         //Initiate the DatabaseHelper
@@ -95,22 +82,48 @@ public class kotowazaTestSelectionActivity extends AppCompatActivity {
                 finish();
             }
         });
+        levelChipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+                selectedRanks.clear(); // Clear the list for new selections
+                for (int id : checkedIds) {
+                    if (!checkedIds.isEmpty()) {
+                        // Get the ID of the last selected chip
+                        Chip selectedChip = findViewById(id);
+                        if (selectedChip != null) {
+                            try {
+                                float rank = Float.parseFloat(selectedChip.getTag().toString());
+                                selectedRanks.add(rank); // Add rank to the list
+                                Log.d("ChipGroup", "Selected rank: " + rank);
+                            } catch (NumberFormatException e) {
+                                Log.e("ChipGroup", "Error parsing chip tag to float", e);
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
         kotowazaTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int questionCountValue = kotowazaQuestionSlider.getProgress();
-                boolean levelTenCheckBox = kotowazaLevelTen.isChecked();
                 if(questionCountValue > 0){
                     Intent intent = new Intent(kotowazaTestSelectionActivity.this, kotowazaTest.class);
                     intent.putExtra("test_type", "kotowazaTest");
                     intent.putExtra("question_count", questionCountValue);
-                    intent.putExtra("levelTen", levelTenCheckBox);
+                    // Convert List<Float> to float[]
+                    float[] ranksArray = new float[selectedRanks.size()];
+                    for (int i = 0; i < selectedRanks.size(); i++) {
+                        ranksArray[i] = selectedRanks.get(i);
+                    }
+                    intent.putExtra("selected_ranks", ranksArray);
                     startActivity(intent);
                 } else {
                     Toast.makeText(kotowazaTestSelectionActivity.this, "問題数を選んでください。", Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
     }
 }

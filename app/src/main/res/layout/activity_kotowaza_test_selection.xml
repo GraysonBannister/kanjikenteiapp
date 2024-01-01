@@ -7,129 +7,115 @@
     android:background="#EFEEEA"
     tools:context=".kotowazaTestSelectionActivity">
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelOneHalf"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/kotowazaLevelChipGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="28dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelOne"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelFour"
-        tools:text="1.5" />
-
-    <CheckBox
-        android:id="@+id/kotowazaLevelOne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="235dp"
-        android:layout_marginTop="170dp"
-        android:textAlignment="center"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
-        app:layout_constraintVertical_bias="0.0"
-        tools:text="1" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.819">
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelTwo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="68dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelSix"
-        tools:text="2" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelTen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="10.0"
+            android:text="10級" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelTwoHalf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelTwo"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelSeven"
-        tools:text="2.5" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelNine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="9.0"
+            android:text="9級" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelFive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelFour"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelTen"
-        tools:text="5" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelEight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="8.0"
+            android:text="8級" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelThree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelTwoHalf"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelEight"
-        tools:text="3" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelSeven"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="7.0"
+            android:text="7級" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelFour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelThree"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaLevelNine"
-        tools:text="4" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelSix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="6.0"
+            android:text="6級" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelSeven"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="58dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelSix"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
-        tools:text="7" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelFive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="5.0"
+            android:text="5級" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelSix"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="68dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
-        tools:text="6" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelFour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="4.0"
+            android:text="4級" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelEight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="12dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelSeven"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
-        tools:text="8" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="3.0"
+            android:text="3級" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelNine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelEight"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
-        tools:text="9" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelTwoHalf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:checked="false"
+            android:tag="2.5"
+            android:text="2.5級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="2.0"
+            android:text="2級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelOneHalf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="1.5"
+            android:text="1.5級" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/levelOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="1.0"
+            android:text="1級" />
+    </com.google.android.material.chip.ChipGroup>
 
     <Button
         android:id="@+id/kotowazaTest"
@@ -197,15 +183,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.571" />
 
-    <CheckBox
-        android:id="@+id/kotowazaLevelTen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/kotowazaLevelNine"
-        app:layout_constraintHorizontal_bias="0.875"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kotowazaQuestionSlider"
-        tools:text="10" />
 </androidx.constraintlayout.widget.ConstraintLayout>

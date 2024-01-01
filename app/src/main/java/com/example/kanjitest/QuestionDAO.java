@@ -164,23 +164,47 @@ public class QuestionDAO {
 
     }
 
-    public List<kotowazaQuestion> getAllKotowazaEntries(){
-        List<kotowazaQuestion> entries =  new ArrayList<>();
+    public List<kotowazaQuestion> getAllKotowazaEntries(float[] ranks){
+        List<kotowazaQuestion> entries = new ArrayList<>();
 
-        String query = "SELECT kotowaza, answer FROM kotowaza";
+        StringBuilder queryBuilder = new StringBuilder("SELECT kotowaza,sentence, question, readingFound, meaning, alternative, similarKotowaza FROM kotowazaData WHERE rank IN (");
+        for (int i = 0; i < ranks.length; i++){
+            queryBuilder.append("?");
+            if(i < ranks.length - 1){
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(")");
+        String[] rankStrings = new String[ranks.length];
+        for (int i = 0; i < ranks.length; i++){
+            rankStrings[i] = String.valueOf(ranks[i]);
+        }
 
-        Cursor cursor = database.rawQuery(query, null);
+        Cursor cursor = database.rawQuery(queryBuilder.toString(), rankStrings);
         if(cursor.moveToFirst()){
             do{
-                String kotowaza = cursor.getString(0);
-                String answer = cursor.getString(1);
+                String Kotowaza = cursor.getString(0);  // 1st column
+                String Sentence = cursor.getString(1);  // 2nd column
+                String Question = cursor.getString(2);  // 3rd column
+                int ReadingFound = cursor.getInt(3);    // 4th column
+                String Meaning = cursor.getString(4);   // 5th column
+                String Alternative = cursor.getString(5); // 6th column
+                String SimilarKotowaza = cursor.getString(6); // 7th column
 
-                if (kotowaza != null && answer != null){
-                    entries.add(new kotowazaQuestion(kotowaza, answer));
+
+                if(Kotowaza != null && Sentence != null && Question != null && ReadingFound == 1 ){
+                    // Split the reading and kunyomi strings into arrays
+
+                    // Check if the arrays lengths match to ensure data integrity
+
+                    entries.add(new kotowazaQuestion(Kotowaza, Sentence, Question, Meaning, Alternative, SimilarKotowaza));
                 }
+
+
             }while(cursor.moveToNext());
+
         }
-        Log.d("KotowazaDOA", "Fetched" + entries.size() + "kotowza entries.");
+        Log.d("kotowazaDAO", "Fetched " + entries.size() + " kotowaza entries.");
         cursor.close();
         return entries;
     }

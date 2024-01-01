@@ -13,7 +13,7 @@ import java.io.OutputStream;
 
 public class kotowazaDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "kotowaza.db";
+    private static final String DB_NAME = "kotowazaData.db";
 
     private final String DB_PATH;
 
